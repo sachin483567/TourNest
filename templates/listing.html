@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tripster Style Listings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-50">
+    <div class="text-2xl font-bold text-blue-600">Tripster</div>
+    <nav class="space-x-6 text-gray-700 hidden md:flex">
+      <a href="#">Properties</a>
+      <a href="#">Attractions</a>
+      <a href="#">Popular</a>
+    </nav>
+    <div class="space-x-2">
+      <button class="px-4 py-1 border rounded text-blue-600 border-blue-600">Sign up</button>
+      <button class="px-4 py-1 bg-blue-600 text-white rounded">Log in</button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+
+    <!-- Sidebar -->
+    <aside class="md:col-span-1 bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold mb-4">Your search</h2>
+
+      <div class="mb-4">
+        <label class="block text-sm text-gray-500">Destination</label>
+        <input type="text" value="Copenhagen, Denmark" class="w-full border rounded p-2 mt-1 text-sm" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm text-gray-500">Check-in</label>
+        <input type="date" class="w-full border rounded p-2 mt-1 text-sm" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm text-gray-500">Check-out</label>
+        <input type="date" class="w-full border rounded p-2 mt-1 text-sm" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm text-gray-500">Guests</label>
+        <input type="text" value="2 adults, 1 room" class="w-full border rounded p-2 mt-1 text-sm" />
+      </div>
+
+      <button class="w-full bg-blue-600 text-white py-2 rounded font-semibold">Search</button>
+
+      <div class="mt-6">
+        <h3 class="font-semibold mb-2">Popular filters</h3>
+        <div class="space-y-2 text-sm text-gray-700">
+          <label class="block"><input type="checkbox" class="mr-2" /> Budget hotel</label>
+          <label class="block"><input type="checkbox" class="mr-2" checked /> Breakfast included</label>
+          <label class="block"><input type="checkbox" class="mr-2" /> Free airport shuttle</label>
+          <label class="block"><input type="checkbox" class="mr-2" /> Hostel/Backpacker</label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Listings -->
+    <section class="md:col-span-3">
+
+      <!-- Top info -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+        <p class="text-sm text-gray-600">20 filtered results for: <span class="font-medium text-black">Copenhagen, 9–12 Dec, 2 guests, 1 room</span></p>
+        <select class="mt-2 md:mt-0 border text-sm rounded px-2 py-1">
+          <option>Sort by</option>
+          <option>Price (low to high)</option>
+          <option>Rating</option>
+        </select>
+      </div>
+
+      <h2 class="text-xl font-semibold mb-4">Breakfast included</h2>
+
+      <!-- Listings -->
+      <div class="space-y-6">
+        
+        <!-- Listing Card -->
+        <div class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4">
+          <img src="https://media.istockphoto.com/id/1390233984/photo/modern-luxury-bedroom.jpg?s=612x612&w=0&k=20&c=po91poqYoQTbHUpO1LD1HcxCFZVpRG-loAMWZT7YRe4=" class="rounded w-full md:w-48 h-32 object-cover" />
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold">Hotel Norrebro</h3>
+            <p class="text-sm text-gray-600">0.4 km from city centre • Free cancellation • Breakfast included</p>
+            <p class="text-sm text-gray-600 mt-1">Comfort room • 1x king size bed • 1x bathroom</p>
+            <div class="mt-2 space-x-2 text-sm">
+              <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded">#Hot deal</span>
+              <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">#Popular</span>
+            </div>
+          </div>
+          <div class="flex flex-col justify-between items-end text-right">
+            <span class="text-green-600 font-bold text-sm">Excellent</span>
+            <span class="text-sm text-gray-500">1,958 reviews</span>
+            <div class="text-lg font-bold mt-2">$180</div>
+            <div class="text-sm text-gray-500">3 nights, 2 guests</div>
+            <button class="mt-2 bg-blue-600 text-white px-4 py-1 rounded text-sm">See booking options</button>
+          </div>
+        </div>
+
+        <!-- Duplicate listing card for variety -->
+        <div class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4">
+          <img src="https://media.designcafe.com/wp-content/uploads/2023/07/05141750/aesthetic-room-decor.jpg" class="rounded w-full md:w-48 h-32 object-cover" />
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold">Hotel Apple</h3>
+            <p class="text-sm text-gray-600">0.6 km from city centre • Free airport shuttle • Breakfast included</p>
+            <p class="text-sm text-gray-600 mt-1">Standard room • 1x queen size bed • 1x bathroom</p>
+            <div class="mt-2 space-x-2 text-sm">
+              <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded">#Hot deal</span>
+            </div>
+          </div>
+          <div class="flex flex-col justify-between items-end text-right">
+            <span class="text-blue-600 font-bold text-sm">Good</span>
+            <span class="text-sm text-gray-500">892 reviews</span>
+            <div class="text-lg font-bold mt-2">$260</div>
+            <div class="text-sm text-gray-500">3 nights, 2 guests</div>
+            <button class="mt-2 bg-blue-600 text-white px-4 py-1 rounded text-sm">See booking options</button>
+          </div>
+        </div>
+
+        <!-- Add more cards as needed... -->
+
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournest - Book Your Stay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        
+        .modal-active {
+            overflow-x: hidden;
+            overflow-y: visible !important;
+        }
+
+        .date-picker::-webkit-calendar-picker-indicator {
+            background-position: right;
+            background-size: auto;
+            cursor: pointer;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-home text-primary text-2xl"></i>
+                    <span class="text-2xl font-bold text-primary">Tournest</span>
+                </div>
+                
+                <!-- Search Bar - Desktop -->
+                <div class="hidden md:flex items-center flex-1 max-w-md mx-4">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Search destinations..." class="w-full py-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-primary">Become a Host</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Help</a>
+                    <button onclick="toggleModal('loginModal')" class="px-4 py-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition">Login</button>
+                    <button onclick="toggleModal('signupModal')" class="px-4 py-2 rounded-full bg-primary text-white hover:bg-blue-600 transition">Sign Up</button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4">
+                <div class="flex items-center mb-4">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Search destinations..." class="w-full py-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-3">
+                    <a href="#" class="text-gray-600 hover:text-primary">Become a Host</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Help</a>
+                    <button onclick="toggleModal('loginModal')" class="px-4 py-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition">Login</button>
+                    <button onclick="toggleModal('signupModal')" class="px-4 py-2 rounded-full bg-primary text-white hover:bg-blue-600 transition">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="bg-white border-b">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center text-sm text-gray-600">
+                <a href="#" class="hover:text-primary">Home</a>
+                <i class="fas fa-chevron-right mx-2 text-xs text-gray-400"></i>
+                <a href="#" class="hover:text-primary">New York</a>
+                <i class="fas fa-chevron-right mx-2 text-xs text-gray-400"></i>
+                <span class="text-gray-800">Cozy Downtown Apartment</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Property Details (2/3 width on large screens) -->
+            <div class="lg:col-span-2">
+                <h1 class="text-3xl font-bold mb-2">Cozy Downtown Apartment</h1>
+                <div class="flex flex-wrap items-center mb-6">
+                    <div class="flex items-center mr-4">
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <span class="font-semibold">4.9</span>
+                        <span class="text-gray-600 ml-1">(128 reviews)</span>
+                    </div>
+                    <div class="flex items-center text-gray-600">
+                        <i class="fas fa-map-marker-alt mr-1"></i>
+                        <span>New York City, NY</span>
+                    </div>
+                </div>
+
+                <!-- Property Images -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="md:col-span-2">
+                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Apartment Main View" class="w-full h-80 object-cover rounded-lg">
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Apartment Living Room" class="w-full h-48 object-cover rounded-lg">
+                    </div>
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Apartment Bedroom" class="w-full h-48 object-cover rounded-lg">
+                        <button class="absolute bottom-4 right-4 bg-white px-4 py-2 rounded-lg shadow-md text-gray-800 hover:bg-gray-100 transition">
+                            <i class="fas fa-images mr-2"></i>
+                            View all photos
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Host Info -->
+                <div class="flex items-start justify-between mb-8 pb-8 border-b">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-2">Private room hosted by Sarah</h2>
+                        <div class="flex items-center text-gray-600">
+                            <span class="mr-4">2 guests</span>
+                            <span class="mr-4">1 bedroom</span>
+                            <span class="mr-4">2 beds</span>
+                            <span>1 private bath</span>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Host" class="w-16 h-16 rounded-full border-2 border-white shadow-md">
+                    </div>
+                </div>
+
+                <!-- Property Description -->
+                <div class="mb-8 pb-8 border-b">
+                    <h2 class="text-2xl font-bold mb-4">About this space</h2>
+                    <p class="text-gray-700 mb-4">
+                        Welcome to my cozy downtown apartment in the heart of New York City! This beautifully renovated space offers the perfect blend of comfort and convenience for your stay in the Big Apple.
+                    </p>
+                    <p class="text-gray-700 mb-4">
+                        Located just minutes from major attractions, restaurants, and public transportation, you'll have easy access to everything NYC has to offer. The apartment features modern furnishings, a fully equipped kitchen, high-speed WiFi, and stunning city views.
+                    </p>
+                    <button class="text-primary font-semibold hover:underline">Show more</button>
+                </div>
+
+                <!-- Amenities -->
+                <div class="mb-8 pb-8 border-b">
+                    <h2 class="text-2xl font-bold mb-4">What this place offers</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-wifi text-gray-600 w-8"></i>
+                            <span>Free WiFi</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-tv text-gray-600 w-8"></i>
+                            <span>Smart TV</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-snowflake text-gray-600 w-8"></i>
+                            <span>Air conditioning</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-utensils text-gray-600 w-8"></i>
+                            <span>Kitchen</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-parking text-gray-600 w-8"></i>
+                            <span>Free parking</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-washer text-gray-600 w-8"></i>
+                            <span>Washer/Dryer</span>
+                        </div>
+                    </div>
+                    <button class="mt-4 px-4 py-2 border border-gray-800 rounded-lg text-gray-800 hover:bg-gray-100 transition">
+                        Show all 12 amenities
+                    </button>
+                </div>
+
+                <!-- Reviews -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <h2 class="text-2xl font-bold mr-2">Reviews</h2>
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span class="font-semibold">4.9</span>
+                            <span class="text-gray-600 ml-1">(128 reviews)</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                        <!-- Review 1 -->
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Reviewer" class="w-12 h-12 rounded-full mr-4">
+                                <div>
+                                    <h4 class="font-semibold">Michael R.</h4>
+                                    <p class="text-gray-600 text-sm">April 2023</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700">
+                                Great location and beautiful apartment! Sarah was an amazing host and provided excellent recommendations for local restaurants. Would definitely stay here again.
+                            </p>
+                        </div>
+
+                        <!-- Review 2 -->
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Reviewer" class="w-12 h-12 rounded-full mr-4">
+                                <div>
+                                    <h4 class="font-semibold">Emily C.</h4>
+                                    <p class="text-gray-600 text-sm">March 2023</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700">
+                                The apartment was spotless and exactly as pictured. The location is perfect for exploring the city, and the bed was super comfortable after a long day of sightseeing.
+                            </p>
+                        </div>
+                    </div>
+
+                    <button class="px-4 py-2 border border-gray-800 rounded-lg text-gray-800 hover:bg-gray-100 transition">
+                        Show all 128 reviews
+                    </button>
+                </div>
+
+                <!-- Location -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4">Location</h2>
+                    <div class="bg-gray-200 rounded-lg h-64 mb-4">
+                        <!-- Map placeholder - in a real app, you'd integrate Google Maps or similar -->
+                        <div class="w-full h-full flex items-center justify-center">
+                            <i class="fas fa-map-marker-alt text-primary text-4xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold mb-2">New York City, NY</h3>
+                    <p class="text-gray-700 mb-4">
+                        Located in the heart of Manhattan, this apartment is within walking distance to Central Park, Times Square, and numerous subway stations. The neighborhood is safe, vibrant, and filled with restaurants, cafes, and shops.
+                    </p>
+                    <button class="text-primary font-semibold hover:underline">Show more</button>
+                </div>
+            </div>
+
+            <!-- Booking Form (1/3 width on large screens) -->
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded-xl shadow-lg sticky top-24">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <span class="text-2xl font-bold">$85</span>
+                            <span class="text-gray-600"> / night</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span class="font-semibold">4.9</span>
+                            <span class="text-gray-600 ml-1">(128)</span>
+                        </div>
+                    </div>
+
+                    <form id="bookingForm">
+                        <!-- Dates -->
+                        <div class="mb-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="relative">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
+                                    <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary date-picker" required>
+                                </div>
+                                <div class="relative">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
+                                    <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary date-picker" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guests -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Guests</label>
+                            <select class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                <option value="1">1 guest</option>
+                                <option value="2" selected>2 guests</option>
+                                <option value="3">3 guests</option>
+                                <option value="4">4 guests</option>
+                            </select>
+                        </div>
+
+                        <!-- Price Breakdown -->
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-700 underline">$85 x 5 nights</span>
+                                <span>$425</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-700 underline">Cleaning fee</span>
+                                <span>$50</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-700 underline">Service fee</span>
+                                <span>$35</span>
+                            </div>
+                            <div class="flex justify-between pt-3 border-t font-bold">
+                                <span>Total</span>
+                                <span>$510</span>
+                            </div>
+                        </div>
+
+                        <!-- Reserve Button -->
+                        <button type="submit" class="w-full py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition font-semibold">
+                            Reserve
+                        </button>
+                        <p class="text-center text-gray-600 text-sm mt-2">You won't be charged yet</p>
+                    </form>
+
+                    <!-- Report Listing -->
+                    <div class="mt-6 text-center">
+                        <button class="text-gray-600 hover:underline flex items-center justify-center mx-auto">
+                            <i class="fas fa-flag mr-2"></i>
+                            <span>Report this listing</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Similar Listings -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-8">Similar places you may like</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Property Card 1 -->
+                <div class="property-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Beach House" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-white p-2 rounded-full">
+                            <i class="far fa-heart text-gray-600 hover:text-red-500 cursor-pointer"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-semibold">Modern Studio Apartment</h3>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="ml-1 text-gray-700">4.7</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Entire studio • 1 bed • 1 bath</p>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            <span>New York City, NY</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold">$75</span>
+                                <span class="text-gray-600"> / night</span>
+                            </div>
+                            <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 2 -->
+                <div class="property-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Modern Loft" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-white p-2 rounded-full">
+                            <i class="far fa-heart text-gray-600 hover:text-red-500 cursor-pointer"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-semibold">Luxury Penthouse</h3>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="ml-1 text-gray-700">4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Entire apartment • 2 beds • 2 baths</p>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            <span>New York City, NY</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold">$150</span>
+                                <span class="text-gray-600"> / night</span>
+                            </div>
+                            <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 3 -->
+                <div class="property-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Rustic Cabin" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-white p-2 rounded-full">
+                            <i class="far fa-heart text-gray-600 hover:text-red-500 cursor-pointer"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-semibold">Charming Brownstone</h3>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="ml-1 text-gray-700">4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Private room • 1 bed • 1 bath</p>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            <span>Brooklyn, NY</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold">$95</span>
+                                <span class="text-gray-600"> / night</span>
+                            </div>
+                            <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 4 -->
+                <div class="property-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Cozy Apartment" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-white p-2 rounded-full">
+                            <i class="far fa-heart text-gray-600 hover:text-red-500 cursor-pointer"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-semibold">Stylish Loft</h3>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="ml-1 text-gray-700">4.6</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Entire loft • 2 beds • 1 bath</p>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            <span>Manhattan, NY</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold">$110</span>
+                                <span class="text-gray-600"> / night</span>
+                            </div>
+                            <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <span class="text-2xl font-bold text-white">Tournest</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Connecting travelers with local hosts for authentic and affordable stays around the world.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Search Stays</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Become a Host</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Safety Information</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Cancellation Options</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Report a Concern</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">123 Main Street, New York, NY 10001</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">info@tournest.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 mb-4 md:mb-0">&copy; 2023 Tournest. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Login</h3>
+                <button onclick="toggleModal('loginModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-600 transition">Login</button>
+            </form>
+            <div class="mt-4 text-center">
+                <a href="#" class="text-primary hover:underline">Forgot password?</a>
+            </div>
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">Don't have an account? <a href="#" onclick="toggleModal('loginModal'); toggleModal('signupModal')" class="text-primary hover:underline">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Sign Up</h3>
+                <button onclick="toggleModal('signupModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <div class="flex space-x-4 mb-4">
+                    <button class="flex-1 py-2 border border-gray-300 rounded-lg bg-primary text-white">Guest</button>
+                    <button class="flex-1 py-2 border border-gray-300 rounded-lg">Host</button>
+                </div>
+            </div>
+            <form>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="firstName" class="block text-gray-700 mb-2">First Name</label>
+                        <input type="text" id="firstName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-gray-700 mb-2">Last Name</label>
+                        <input type="text" id="lastName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="signupEmail" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="signupEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="mb-4">
+                    <label for="phone" class="block text-gray-700 mb-2">Phone Number</label>
+                    <input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="mb-6">
+                    <label for="signupPassword" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="signupPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-600 transition">Sign Up</button>
+            </form>
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">Already have an account? <a href="#" onclick="toggleModal('signupModal'); toggleModal('loginModal')" class="text-primary hover:underline">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div id="bookingConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                    <i class="fas fa-check text-3xl text-green-500"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Booking Confirmed!</h3>
+                <p class="text-gray-600 mt-2">Your reservation has been successfully placed.</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Booking ID:</span>
+                    <span class="font-semibold">TN-12345678</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Check-in:</span>
+                    <span class="font-semibold">May 15, 2023</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Check-out:</span>
+                    <span class="font-semibold">May 20, 2023</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Guests:</span>
+                    <span class="font-semibold">2</span>
+                </div>
+                <div class="flex justify-between pt-2 border-t mt-2">
+                    <span class="text-gray-600">Total:</span>
+                    <span class="font-bold">$510</span>
+                </div>
+            </div>
+            <div class="text-center mb-6">
+                <p class="text-gray-600">A confirmation email has been sent to your email address.</p>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="toggleModal('bookingConfirmModal')" class="flex-1 py-3 border border-primary text-primary rounded-lg hover:bg-gray-50 transition">Close</button>
+                <button class="flex-1 py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition">View Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+        
+        // Toggle Modal
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+            document.body.classList.toggle('modal-active');
+        }
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(function(modal) {
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                    document.body.classList.remove('modal-active');
+                }
+            });
+        });
+
+        // Handle booking form submission
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            toggleModal('bookingConfirmModal');
+        });
+
+        // Set minimum date for date pickers to today
+        const today = new Date().toISOString().split('T')[0];
+        document.querySelectorAll('.date-picker').forEach(function(picker) {
+            picker.setAttribute('min', today);
+        });
+    </script>
+</body>
+</html>
