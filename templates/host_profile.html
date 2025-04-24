@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host Profile - Tournest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        
+        .modal-active {
+            overflow-x: hidden;
+            overflow-y: visible !important;
+        }
+        
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-home text-primary text-2xl"></i>
+                    <span class="text-2xl font-bold text-primary">Tournest</span>
+                </div>
+                
+                <!-- Search Bar - Desktop -->
+                <div class="hidden md:flex items-center flex-1 max-w-md mx-4">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Search destinations..." class="w-full py-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-primary">Switch to Traveling</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Help</a>
+                    <!-- User Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profileDropdown" class="flex items-center space-x-2 focus:outline-none">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-secondary">
+                            <span class="text-gray-700 font-medium">Michael</span>
+                            <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                        </button>
+                        <div id="profileMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden z-10">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2 text-secondary"></i> Host Profile
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-home mr-2 text-secondary"></i> My Listings
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-calendar-alt mr-2 text-secondary"></i> Reservations
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-chart-line mr-2 text-secondary"></i> Performance
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-cog mr-2 text-secondary"></i> Settings
+                            </a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2 text-secondary"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4">
+                <div class="flex items-center mb-4">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Search destinations..." class="w-full py-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-3">
+                    <a href="#" class="text-gray-600 hover:text-primary">Switch to Traveling</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Help</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Host Profile</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">My Listings</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Reservations</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Performance</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Settings</a>
+                    <a href="#" class="text-gray-600 hover:text-primary">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Host Profile Section -->
+    <section class="py-10 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row">
+                <!-- Sidebar -->
+                <div class="w-full md:w-1/4 mb-8 md:mb-0">
+                    <div class="bg-white rounded-xl shadow-md p-6 sticky top-24">
+                        <div class="flex flex-col items-center text-center mb-6">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Rodriguez" class="w-32 h-32 rounded-full border-4 border-secondary mb-4">
+                            <h2 class="text-2xl font-bold">Michael Rodriguez</h2>
+                            <p class="text-gray-600">Miami, USA</p>
+                            <div class="flex items-center mt-2">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="ml-1 text-gray-700">4.8 (56 reviews)</span>
+                            </div>
+                            <div class="bg-secondary text-white px-3 py-1 rounded-full text-sm mt-2">
+                                <i class="fas fa-award mr-1"></i> Superhost
+                            </div>
+                            <p class="text-gray-600 mt-2">Hosting since Mar 2020</p>
+                        </div>
+                        <div class="border-t border-gray-200 pt-6">
+                            <ul class="space-y-3">
+                                <li>
+                                    <a href="#" class="flex items-center text-secondary font-medium">
+                                        <i class="fas fa-user mr-3 w-5 text-center"></i>
+                                        <span>Host Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center text-gray-600 hover:text-secondary">
+                                        <i class="fas fa-home mr-3 w-5 text-center"></i>
+                                        <span>My Listings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center text-gray-600 hover:text-secondary">
+                                        <i class="fas fa-calendar-alt mr-3 w-5 text-center"></i>
+                                        <span>Reservations</span>
+                                        <span class="ml-auto bg-secondary text-white text-xs px-2 py-1 rounded-full">5</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center text-gray-600 hover:text-secondary">
+                                        <i class="fas fa-comment mr-3 w-5 text-center"></i>
+                                        <span>Messages</span>
+                                        <span class="ml-auto bg-secondary text-white text-xs px-2 py-1 rounded-full">8</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center text-gray-600 hover:text-secondary">
+                                        <i class="fas fa-chart-line mr-3 w-5 text-center"></i>
+                                        <span>Performance</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center text-gray-600 hover:text-secondary">
+                                        <i class="fas fa-dollar-sign mr-3 w-5 text-center"></i>
+                                        <span>Earnings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center text-gray-600 hover:text-secondary">
+                                        <i class="fas fa-cog mr-3 w-5 text-center"></i>
+                                        <span>Account Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="w-full md:w-3/4 md:pl-8">
+                    <!-- Dashboard Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold">Active Listings</h3>
+                                <i class="fas fa-home text-2xl text-secondary"></i>
+                            </div>
+                            <p class="text-3xl font-bold">4</p>
+                            <div class="flex items-center mt-2 text-sm">
+                                <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+                                <span class="text-green-500">+1</span>
+                                <span class="text-gray-500 ml-1">from last month</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold">Upcoming Bookings</h3>
+                                <i class="fas fa-calendar-check text-2xl text-secondary"></i>
+                            </div>
+                            <p class="text-3xl font-bold">12</p>
+                            <div class="flex items-center mt-2 text-sm">
+                                <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+                                <span class="text-green-500">+3</span>
+                                <span class="text-gray-500 ml-1">from last month</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold">Monthly Earnings</h3>
+                                <i class="fas fa-dollar-sign text-2xl text-secondary"></i>
+                            </div>
+                            <p class="text-3xl font-bold">$3,450</p>
+                            <div class="flex items-center mt-2 text-sm">
+                                <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+                                <span class="text-green-500">+15%</span>
+                                <span class="text-gray-500 ml-1">from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Header -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold">Host Profile</h3>
+                            <button class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-green-600 transition">
+                                <i class="fas fa-edit mr-2"></i> Edit Profile
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-lg font-semibold mb-4">Personal Information</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <p class="text-gray-500 text-sm">Full Name</p>
+                                        <p>Michael Rodriguez</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 text-sm">Email</p>
+                                        <p>michael.rodriguez@example.com</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 text-sm">Phone</p>
+                                        <p>+1 (555) 987-6543</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 text-sm">Location</p>
+                                        <p>Miami, Florida, USA</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-4">About Me</h4>
+                                <p class="text-gray-700">
+                                    Hello! I'm Michael, a passionate host with a love for hospitality. I've been hosting 
+                                    for over 3 years and enjoy meeting people from around the world. I take pride in 
+                                    providing clean, comfortable, and stylish accommodations for all my guests.
+                                </p>
+                                <div class="mt-4">
+                                    <h4 class="text-lg font-semibold mb-2">Languages</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-light rounded-full text-gray-700">English</span>
+                                        <span class="px-3 py-1 bg-light rounded-full text-gray-700">Spanish</span>
+                                        <span class="px-3 py-1 bg-light rounded-full text-gray-700">Portuguese</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Verification Section -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h3 class="text-xl font-bold mb-4">Host Verifications</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center p-3 border border-green-200 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                                <div>
+                                    <p class="font-medium">Email Address</p>
+                                    <p class="text-sm text-gray-600">Verified on Mar 10, 2020</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 border border-green-200 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                                <div>
+                                    <p class="font-medium">Phone Number</p>
+                                    <p class="text-sm text-gray-600">Verified on Mar 10, 2020</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 border border-green-200 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                                <div>
+                                    <p class="font-medium">Government ID</p>
+                                    <p class="text-sm text-gray-600">Verified on Mar 12, 2020</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 border border-green-200 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                                <div>
+                                    <p class="font-medium">Payment Method</p>
+                                    <p class="text-sm text-gray-600">Verified on Mar 15, 2020</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 border border-green-200 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                                <div>
+                                    <p class="font-medium">Background Check</p>
+                                    <p class="text-sm text-gray-600">Verified on Apr 5, 2020</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 border border-green-200 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                                <div>
+                                    <p class="font-medium">Property Ownership</p>
+                                    <p class="text-sm text-gray-600">Verified on Apr 10, 2020</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Performance Chart -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold">Performance Overview</h3>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 bg-secondary text-white rounded-lg text-sm">Monthly</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-sm">Yearly</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <!-- This would be replaced with an actual chart library in a real implementation -->
+                            <div class="flex h-full items-end justify-between px-2">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-12 bg-secondary rounded-t-md" style="height: 60%"></div>
+                                    <span class="text-xs mt-1">Jan</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-12 bg-secondary rounded-t-md" style="height: 75%"></div>
+                                    <span class="text-xs mt-1">Feb</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-12 bg-secondary rounded-t-md" style="height: 65%"></div>
+                                    <span class="text-xs mt-1">Mar</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-12 bg-secondary rounded-t-md" style="height: 80%"></div>
+                                    <span class="text-xs mt-1">Apr</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-12 bg-secondary rounded-t-md" style="height: 90%"></div>
+                                    <span class="text-xs mt-1">May</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-12 bg-secondary rounded-t-md" style="height: 85%"></div>
+                                    <span class="text-xs mt-1">Jun</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mt-6">
+                            <div class="text-center">
+                                <p class="text-gray-600 text-sm">Occupancy Rate</p>
+                                <p class="text-xl font-bold">87%</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-gray-600 text-sm">Avg. Daily Rate</p>
+                                <p class="text-xl font-bold">$125</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-gray-600 text-sm">Response Rate</p>
+                                <p class="text-xl font-bold">98%</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- My Listings -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold">My Listings</h3>
+                            <button class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-green-600 transition">
+                                <i class="fas fa-plus mr-2"></i> Add New Listing
+                            </button>
+                        </div>
+                        <div class="space-y-6">
+                            <!-- Listing 1 -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                                <div class="flex flex-col md:flex-row">
+                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Beachfront Villa" class="w-full md:w-48 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h4 class="font-semibold text-lg">Beachfront Villa</h4>
+                                                <p class="text-gray-600">Miami Beach, FL</p>
+                                            </div>
+                                            <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Active</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 text-gray-600">
+                                            <i class="fas fa-bed mr-2"></i>
+                                            <span>4 beds • 2 baths • Entire home</span>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-4">
+                                            <div>
+                                                <span class="text-lg font-bold">$210</span>
+                                                <span class="text-gray-600"> / night</span>
+                                            </div>
+                                            <div>
+                                                <button class="px-3 py-1 border border-secondary text-secondary rounded-lg hover:bg-secondary hover:text-white transition mr-2">Edit</button>
+                                                <button class="px-3 py-1 bg-secondary text-white rounded-lg hover:bg-green-600 transition">View</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Listing 2 -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                                <div class="flex flex-col md:flex-row">
+                                    <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Modern Urban Loft" class="w-full md:w-48 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h4 class="font-semibold text-lg">Modern Urban Loft</h4>
+                                                <p class="text-gray-600">Downtown Miami, FL</p>
+                                            </div>
+                                            <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Active</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 text-gray-600">
+                                            <i class="fas fa-bed mr-2"></i>
+                                            <span>1 bed • 1 bath • Entire loft</span>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-4">
+                                            <div>
+                                                <span class="text-lg font-bold">$120</span>
+                                                <span class="text-gray-600"> / night</span>
+                                            </div>
+                                            <div>
+                                                <button class="px-3 py-1 border border-secondary text-secondary rounded-lg hover:bg-secondary hover:text-white transition mr-2">Edit</button>
+                                                <button class="px-3 py-1 bg-secondary text-white rounded-lg hover:bg-green-600 transition">View</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Listing 3 -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                                <div class="flex flex-col md:flex-row">
+                                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Cozy Apartment" class="w-full md:w-48 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h4 class="font-semibold text-lg">Cozy Apartment</h4>
+                                                <p class="text-gray-600">Coral Gables, FL</p>
+                                            </div>
+                                            <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Active</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 text-gray-600">
+                                            <i class="fas fa-bed mr-2"></i>
+                                            <span>2 beds • 1 bath • Entire apartment</span>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-4">
+                                            <div>
+                                                <span class="text-lg font-bold">$95</span>
+                                                <span class="text-gray-600"> / night</span>
+                                            </div>
+                                            <div>
+                                                <button class="px-3 py-1 border border-secondary text-secondary rounded-lg hover:bg-secondary hover:text-white transition mr-2">Edit</button>
+                                                <button class="px-3 py-1 bg-secondary text-white rounded-lg hover:bg-green-600 transition">View</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Listing 4 -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                                <div class="flex flex-col md:flex-row">
+                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Rustic Cabin" class="w-full md:w-48 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h4 class="font-semibold text-lg">Lakeside Cabin</h4>
+                                                <p class="text-gray-600">Key Largo, FL</p>
+                                            </div>
+                                            <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Active</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 text-gray-600">
+                                            <i class="fas fa-bed mr-2"></i>
+                                            <span>3 beds • 2 baths • Entire cabin</span>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-4">
+                                            <div>
+                                                <span class="text-lg font-bold">$175</span>
+                                                <span class="text-gray-600"> / night</span>
+                                            </div>
+                                            <div>
+                                                <button class="px-3 py-1 border border-secondary text-secondary rounded-lg hover:bg-secondary hover:text-white transition mr-2">Edit</button>
+                                                <button class="px-3 py-1 bg-secondary text-white rounded-lg hover:bg-green-600 transition">View</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Guest Reviews -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold">Guest Reviews</h3>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                <span class="font-semibold">4.8</span>
+                                <span class="text-gray-600 ml-1">(56 reviews)</span>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="border-b border-gray-200 pb-6">
+                                <div class="flex items-start">
+                                    <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Sarah" class="w-12 h-12 rounded-full mr-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h4 class="font-semibold">Sarah Johnson</h4>
+                                            <span class="text-gray-600 text-sm">1 week ago</span>
+                                        </div>
+                                        <div class="flex text-yellow-400 mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <p class="text-gray-700">
+                                            Michael's beachfront villa was absolutely stunning! The location was perfect, 
+                                            just steps from the beach. The place was immaculately clean and had all the 
+                                            amenities we needed. Michael was a fantastic host, very responsive and provided 
+                                            great local recommendations. Would definitely stay here again!
+                                        </p>
+                                        <div class="mt-2">
+                                            <button class="text-secondary hover:underline text-sm">Reply to review</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-b border-gray-200 pb-6">
+                                <div class="flex items-start">
+                                    <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="David" class="w-12 h-12 rounded-full mr-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h4 class="font-semibold">David Wilson</h4>
+                                            <span class="text-gray-600 text-sm">2 weeks ago</span>
+                                        </div>
+                                        <div class="flex text-yellow-400 mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <p class="text-gray-700">
+                                            We had a great stay at Michael's modern loft. The space was stylish and comfortable, 
+                                            and the location was perfect for exploring downtown Miami. Michael was very 
+                                            accommodating with our check-in time and quick to respond to any questions.
+                                        </p>
+                                        <div class="mt-2">
+                                            <button class="text-secondary hover:underline text-sm">Reply to review</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-start">
+                                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emily" class="w-12 h-12 rounded-full mr-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h4 class="font-semibold">Emily Chen</h4>
+                                            <span class="text-gray-600 text-sm">3 weeks ago</span>
+                                        </div>
+                                        <div class="flex text-yellow-400 mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <p class="text-gray-700">
+                                            The cozy apartment was perfect for our weekend getaway. It was clean, well-equipped, 
+                                            and in a great location. Michael was an excellent host - friendly, communicative, 
+                                            and provided lots of helpful tips about the area. Would highly recommend!
+                                        </p>
+                                        <div class="mt-2">
+                                            <button class="text-secondary hover:underline text-sm">Reply to review</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 text-center">
+                            <button class="px-6 py-2 border border-secondary text-secondary rounded-full hover:bg-secondary hover:text-white transition">
+                                View All Reviews
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-16 pb-8 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <span class="text-2xl font-bold text-white">Tournest</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Connecting travelers with local hosts for authentic and affordable stays around the world.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Search Stays</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Become a Host</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Safety Information</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Cancellation Options</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Report a Concern</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">123 Main Street, New York, NY 10001</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">info@tournest.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 mb-4 md:mb-0">&copy; 2023 Tournest. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+        
+        // Toggle Profile Dropdown
+        document.getElementById('profileDropdown').addEventListener('click', function() {
+            document.getElementById('profileMenu').classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('#profileDropdown')) {
+                const dropdown = document.getElementById('profileMenu');
+                if (!dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
