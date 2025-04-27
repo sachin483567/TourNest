@@ -24,9 +24,10 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
      path("",TemplateView.as_view (template_name="index.html"),name="home"),
-     path("login/",TemplateView.as_view (template_name="login.html"),name="login"),
+    #  path("login/",TemplateView.as_view (template_name="login.html"),name="login"),
      
      path("",include('location.urls'),name="location"),
+     path("",include('authentication.urls'),name="auth"),
 ]
 
 if settings.DEBUG:
