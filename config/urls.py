@@ -24,7 +24,10 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
      path("",TemplateView.as_view (template_name="index.html"),name="home"),
-    #  path("login/",TemplateView.as_view (template_name="login.html"),name="login"),
+     path("login/",TemplateView.as_view (template_name="login.html"),name="login"),
+     path("register/",TemplateView.as_view (template_name="register.html"),name="register"),
+     path("host_profile/",TemplateView.as_view (template_name="host_profile.html"),name="host_profile"),
+     path("user_profile/",TemplateView.as_view (template_name="user_profile.html"),name="user_profile"),
      
      path("",include('location.urls'),name="location"),
      path("",include('authentication.urls'),name="auth"),
