@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 class Location(models.Model):
     name = models.CharField(max_length=50)
-    description = models.IntegerField()
+    description = models.TextField()
     rent = models.IntegerField()
     distance = models.IntegerField()
     location = models.CharField(max_length=50)
