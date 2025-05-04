@@ -28,6 +28,8 @@ urlpatterns = [
      path("register/",TemplateView.as_view (template_name="register.html"),name="register"),
      path("host_profile/",TemplateView.as_view (template_name="host_profile.html"),name="host_profile"),
      path("user_profile/",TemplateView.as_view (template_name="user_profile.html"),name="user_profile"),
+     path("booking/",TemplateView.as_view (template_name="booking.html"),name="booking"),
+
      
      path("",include('location.urls'),name="location"),
      path("",include('authentication.urls'),name="auth"),

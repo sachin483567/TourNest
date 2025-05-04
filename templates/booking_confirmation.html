@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<main class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- Success Message -->
+            <div class="text-center mb-8">
+                <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">Booking Confirmed!</h1>
+                <p class="text-gray-600">Thank you for your reservation</p>
+            </div>
+
+            <!-- Booking Details -->
+            <div class="border-t border-b py-6 mb-6">
+                <h2 class="font-semibold text-lg mb-4">Booking Details</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Booking ID</span>
+                        <span class="font-medium">{{ booking.id }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Check-in</span>
+                        <span class="font-medium">{{ booking.check_in|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Check-out</span>
+                        <span class="font-medium">{{ booking.check_out|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Guests</span>
+                        <span class="font-medium">{{ booking.guests }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Details -->
+            <div class="flex gap-4 mb-6">
+                <img src="{{ location.image.url }}" alt="{{ location.name }}" 
+                    class="w-24 h-24 rounded-lg object-cover">
+                <div>
+                    <h3 class="font-semibold">{{ location.name }}</h3>
+                    <p class="text-gray-600 text-sm">{{ location.location }}</p>
+                </div>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="space-y-3 mb-6">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">₹{{ location.rent }} × {{ nights }} nights</span>
+                    <span>₹{{ location.rent|multiply:nights }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Service fee</span>
+                    <span>₹500</span>
+                </div>
+                <div class="flex justify-between font-semibold text-lg pt-3 border-t">
+                    <span>Total</span>
+                    <span>₹{{ booking.total_price }}</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-4">
+                <a href="{% url 'browse' %}" 
+                    class="flex-1 px-6 py-3 bg-primary text-white text-center rounded-lg hover:bg-blue-600 transition">
+                    Book Another Stay
+                </a>
+                <a href="#" 
+                    class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    View Receipt
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
