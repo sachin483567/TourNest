@@ -1,72 +1,97 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %} 
+{% block content %}
 <main class="container mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-4 gap-6">
   <!-- Sidebar -->
   <aside class="md:col-span-1 bg-white p-6 rounded-lg shadow">
-    <h2 class="text-lg font-semibold mb-4">Your search</h2>
+    <h2 class="text-lg font-semibold mb-4">Search & Filters</h2>
+    
+    <form method="GET" action="{% url 'browse' %}">
+        <div class="mb-4">
+            <label class="block text-sm text-gray-500" for="destination">Destination</label>
+            <input
+                id="destination"
+                name="destination"
+                type="text"
+                value="{{ search_params.destination }}"
+                class="w-full border rounded p-2 mt-1 text-sm"
+                placeholder="Enter location"
+            />
+        </div>
 
-    <div class="mb-4">
-      <label class="block text-sm text-gray-500">Destination</label>
-      <input
-        type="text"
-        value="Copenhagen, Denmark"
-        class="w-full border rounded p-2 mt-1 text-sm"
-      />
-    </div>
+        <div class="mb-4">
+            <label class="block text-sm text-gray-500">Price Range</label>
+            <div class="grid grid-cols-2 gap-2">
+                <input
+                    type="number"
+                    name="min_price"
+                    value="{{ search_params.min_price }}"
+                    placeholder="Min"
+                    class="w-full border rounded p-2 text-sm"
+                />
+                <input
+                    type="number"
+                    name="max_price"
+                    value="{{ search_params.max_price }}"
+                    placeholder="Max"
+                    class="w-full border rounded p-2 text-sm"
+                />
+            </div>
+        </div>
 
-    <div class="mb-4">
-      <label class="block text-sm text-gray-500">Check-in</label>
-      <input type="date" class="w-full border rounded p-2 mt-1 text-sm" />
-    </div>
+        <div class="mb-4">
+            <label class="block text-sm text-gray-500 mb-2">Amenities</label>
+            <div class="space-y-2">
+                <label class="flex items-center">
+                    <input type="checkbox" name="amenities" value="wifi" 
+                        {% if 'wifi' in search_params.amenities %}checked{% endif %}
+                        class="mr-2"
+                    />
+                    <span class="text-sm">WiFi</span>
+                </label>
+                <label class="flex items-center">
+                    <input type="checkbox" name="amenities" value="parking"
+                        {% if 'parking' in search_params.amenities %}checked{% endif %}
+                        class="mr-2"
+                    />
+                    <span class="text-sm">Parking</span>
+                </label>
+                <label class="flex items-center">
+                    <input type="checkbox" name="amenities" value="breakfast"
+                        {% if 'breakfast' in search_params.amenities %}checked{% endif %}
+                        class="mr-2"
+                    />
+                    <span class="text-sm">Breakfast</span>
+                </label>
+            </div>
+        </div>
 
-    <div class="mb-4">
-      <label class="block text-sm text-gray-500">Check-out</label>
-      <input type="date" class="w-full border rounded p-2 mt-1 text-sm" />
-    </div>
+        <div class="mb-4">
+            <label class="block text-sm text-gray-500" for="sort_by">Sort By</label>
+            <select name="sort_by" id="sort_by" class="w-full border rounded p-2 mt-1 text-sm">
+                <option value="">Default</option>
+                <option value="price_low" {% if search_params.sort_by == 'price_low' %}selected{% endif %}>
+                    Price (Low to High)
+                </option>
+                <option value="price_high" {% if search_params.sort_by == 'price_high' %}selected{% endif %}>
+                    Price (High to Low)
+                </option>
+            </select>
+        </div>
 
-    <div class="mb-4">
-      <label class="block text-sm text-gray-500">Guests</label>
-      <input
-        type="text"
-        value="2 adults, 1 room"
-        class="w-full border rounded p-2 mt-1 text-sm"
-      />
-    </div>
-
-    <button class="w-full bg-blue-600 text-white py-2 rounded font-semibold">
-      Search
-    </button>
-
-    <div class="mt-6">
-      <h3 class="font-semibold mb-2">Popular filters</h3>
-      <div class="space-y-2 text-sm text-gray-700">
-        <label class="block"
-          ><input type="checkbox" class="mr-2" /> Budget hotel</label
-        >
-        <label class="block"
-          ><input type="checkbox" class="mr-2" checked /> Breakfast
-          included</label
-        >
-        <label class="block"
-          ><input type="checkbox" class="mr-2" /> Free airport shuttle</label
-        >
-        <label class="block"
-          ><input type="checkbox" class="mr-2" /> Hostel/Backpacker</label
-        >
-      </div>
-    </div>
+        <button type="submit" 
+            class="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700">
+            Search
+        </button>
+    </form>
   </aside>
 
   <!-- Listings -->
   <section class="md:col-span-3">
     <!-- Top info -->
-    <div
-      class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4"
-    >
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
       <p class="text-sm text-gray-600">
         20 filtered results for:
-        <span class="font-medium text-black"
-          >Copenhagen, 9–12 Dec, 2 guests, 1 room</span
-        >
+        <span class="font-medium text-black">Copenhagen, 9–12 Dec, 2 guests, 1 room</span>
       </p>
       <select class="mt-2 md:mt-0 border text-sm rounded px-2 py-1">
         <option>Sort by</option>
@@ -80,43 +105,41 @@
     <!-- Listings -->
     <div class="space-y-6">
       {% for location in locationList %}
-      <div
-        class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4"
-      >
+      <article class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4">
         <img
           src="{{location.image.url}}"
+          alt="{{location.name}}"
           class="rounded w-full md:w-48 h-32 object-cover"
         />
         <div class="flex-1">
           <h3 class="text-lg font-semibold">{{location.name}}</h3>
           <p class="text-sm text-gray-600">
-            0.4 km from city centre • Free cancellation • Breakfast included
+            {{location.description}}
           </p>
           <p class="text-sm text-gray-600 mt-1">
-            Comfort room • 1x king size bed • 1x bathroom
+          {{location.location}}
           </p>
           <div class="mt-2 space-x-2 text-sm">
-            <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded"
-              >#Hot deal</span
-            >
-            <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded"
-              >#Popular</span
-            >
+            <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded">#Hot deal</span>
+            <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">#Popular</span>
           </div>
         </div>
         <div class="flex flex-col justify-between items-end text-right">
           <span class="text-green-600 font-bold text-sm">Excellent</span>
           <span class="text-sm text-gray-500">1,958 reviews</span>
-          <div class="text-lg font-bold mt-2">$180</div>
+          <div class="text-lg font-bold mt-2">₹{{location.rent}}</div>
           <div class="text-sm text-gray-500">3 nights, 2 guests</div>
-          <a href="{% url 'locationDetails' location.id %}" class="mt-2 bg-blue-600 text-white px-4 py-1 rounded text-sm">
+          <a
+            href="{% url 'locationDetails' location.id %}"
+            class="mt-2 bg-blue-600 text-white px-4 py-1 rounded text-sm hover:bg-blue-700"
+            aria-label="See booking options for {{location.name}}"
+          >
             See booking options
-          </button>
+          </a>
         </div>
-      </div>
-
+      </article>
       {% endfor %}
     </div>
   </section>
 </main>
-{% endblock %}
+{% endblock %}

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>Cozy Downtown Apartment - Tournest</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -60,6 +60,11 @@
 
         .date-picker {
             position: relative;
+        }
+
+        .description-text {
+            line-height: 1.5;
+            transition: max-height 0.3s ease-out;
         }
     </style>
 </head>
@@ -124,7 +129,7 @@
                 <i class="fas fa-chevron-right mx-2 text-xs text-gray-400"></i>
                 <a href="#" class="hover:text-primary">New York</a>
                 <i class="fas fa-chevron-right mx-2 text-xs text-gray-400"></i>
-                <span class="text-gray-800">Cozy Downtown Apartment</span>
+                <span class="text-gray-800">{{location.name}}</span>
             </div>
         </div>
     </div>
@@ -133,7 +138,7 @@
     <main class="container mx-auto px-4 py-8">
         <!-- Property Title Section -->
         <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Cozy Downtown Apartment</h1>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">{{location.name}}</h1>
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center">
                     <i class="fas fa-star text-yellow-400 mr-1"></i>
@@ -146,7 +151,7 @@
                 </div>
                 <div class="flex items-center">
                     <i class="fas fa-map-marker-alt text-gray-600 mr-1"></i>
-                    <span class="text-gray-600">New York City, NY</span>
+                    <span class="text-gray-600">lucknow</span>
                 </div>
             </div>
         </div>
@@ -155,7 +160,7 @@
         <div class="mb-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-xl overflow-hidden">
                 <div class="md:col-span-2 h-80">
-                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Apartment Main View" class="w-full h-full object-cover">
+                    <img src="{{location.image.url}}" alt="Apartment Main View" class="w-full h-full object-cover">
                 </div>
                 <div class="h-48">
                     <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Apartment Living Room" class="w-full h-full object-cover">
@@ -179,7 +184,7 @@
                 <!-- Host Info -->
                 <div class="flex justify-between items-start border-b pb-6 mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold mb-2">Private room hosted by Sarah</h2>
+                        <h2 class="text-2xl font-bold mb-2">Private room hosted by Sachin</h2>
                         <div class="flex items-center text-gray-600">
                             <span class="mr-4">2 guests</span>
                             <span class="mr-4">1 bedroom</span>
@@ -226,60 +231,37 @@
                 <!-- Description -->
                 <div class="border-b pb-6 mb-6">
                     <h2 class="text-xl font-bold mb-4">About this space</h2>
-                    <p class="text-gray-700 mb-4">
-                        Welcome to our cozy downtown apartment in the heart of New York City! This beautifully renovated space offers the perfect blend of comfort and convenience for your stay in the Big Apple.
-                    </p>
-                    <p class="text-gray-700 mb-4">
-                        Located just steps away from major attractions, restaurants, and public transportation, you'll have easy access to everything NYC has to offer. The apartment features modern furnishings, a fully equipped kitchen, high-speed WiFi, and stunning city views.
-                    </p>
-                    <p class="text-gray-700 mb-4">
-                        Whether you're visiting for business or pleasure, our apartment provides a comfortable and stylish home base for your New York adventure.
-                    </p>
-                    <button class="text-primary font-semibold hover:underline">Show more</button>
+                    <div class="relative">
+                        <p id="description" class="description-text overflow-hidden transition-all duration-300" style="max-height: 100px;">
+                            {{location.description}}
+                        </p>
+                        <div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white to-transparent"></div>
+                    </div>
+                    <button 
+                        id="showMoreBtn" 
+                        class="text-blue-600 font-semibold hover:underline mt-2"
+                        onclick="toggleDescription()"
+                    >
+                        Show more
+                    </button>
                 </div>
 
                 <!-- Amenities -->
                 <div class="border-b pb-6 mb-6">
                     <h2 class="text-xl font-bold mb-4">What this place offers</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for facility in location.facilities.split %}
                         <div class="flex items-center">
                             <div class="amenity-icon mr-4">
-                                <i class="fas fa-wifi"></i>
+                                <i class="fas fa-check"></i>
                             </div>
-                            <span>Free WiFi</span>
+                            <span>{{ facility }}</span>
                         </div>
-                        <div class="flex items-center">
-                            <div class="amenity-icon mr-4">
-                                <i class="fas fa-tv"></i>
-                            </div>
-                            <span>Smart TV</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="amenity-icon mr-4">
-                                <i class="fas fa-snowflake"></i>
-                            </div>
-                            <span>Air conditioning</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="amenity-icon mr-4">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                            <span>Kitchen</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="amenity-icon mr-4">
-                                <i class="fas fa-washer"></i>
-                            </div>
-                            <span>Washer</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="amenity-icon mr-4">
-                                <i class="fas fa-parking"></i>
-                            </div>
-                            <span>Free parking</span>
-                        </div>
+                        {% endfor %}
                     </div>
-                    <button class="mt-4 px-4 py-2 border border-gray-900 rounded-lg text-gray-900 hover:bg-gray-100 transition">Show all 12 amenities</button>
+                    <button class="mt-4 px-4 py-2 border border-gray-900 rounded-lg text-gray-900 hover:bg-gray-100 transition">
+                        Show all amenities
+                    </button>
                 </div>
 
                 <!-- Calendar -->
@@ -455,22 +437,24 @@
                 <div class="border-b pb-6 mb-6">
                     <h2 class="text-xl font-bold mb-4">Where you'll be</h2>
                     <div class="h-80 bg-gray-200 rounded-xl mb-4">
-                        <!-- Map placeholder - in a real app, you'd use Google Maps or similar -->
-                        <div class="w-full h-full flex items-center justify-center bg-gray-300 rounded-xl">
-                            <div class="text-center">
-                                <i class="fas fa-map-marker-alt text-primary text-4xl mb-2"></i>
-                                <p class="text-gray-700">Map loading...</p>
-                            </div>
+                        {% if location.latitude and location.longitude %}
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d{{location.longitude}}!3d{{location.latitude}}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sin!4v1746004634057!5m2!1sen!2sin" 
+                            width="100%" 
+                            height="320" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                        {% else %}
+                        <div class="flex items-center justify-center h-full text-gray-500">
+                            <p>Map location not available</p>
                         </div>
+                        {% endif %}
                     </div>
-                    <h3 class="font-semibold mb-2">New York City, NY</h3>
-                    <p class="text-gray-700 mb-4">
-                        Located in the heart of Manhattan, this apartment is within walking distance to major attractions including Times Square, Central Park, and Broadway theaters. The neighborhood is safe, vibrant, and filled with restaurants, cafes, and shops.
-                    </p>
-                    <p class="text-gray-700 mb-4">
-                        Public transportation is easily accessible with subway stations just a block away, making it convenient to explore all of New York City.
-                    </p>
-                    <button class="text-primary font-semibold hover:underline">Show more</button>
+                    <h3 class="font-semibold mb-2">{{location.name}}</h3>
+                    <p class="text-gray-700 mb-4">{{location.description}}</p>
                 </div>
 
                 <!-- Host Info -->
@@ -570,72 +554,75 @@
                 <div class="bg-white p-6 rounded-xl shadow-lg border sticky top-24">
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <span class="text-2xl font-bold">$85</span>
+                            <span class="text-2xl font-bold">₹{{location.rent}}</span>
                             <span class="text-gray-600"> / night</span>
                         </div>
                         <div class="flex items-center">
                             <i class="fas fa-star text-yellow-400 mr-1"></i>
                             <span class="font-semibold">4.9</span>
-                            <span class="text-gray-600 ml-1">(128)</span>
                         </div>
                     </div>
 
                     <!-- Booking Form -->
-                    <div class="border rounded-lg overflow-hidden mb-4">
-                        <div class="grid grid-cols-2">
-                            <div class="p-3 border-r border-b">
-                                <label class="block text-xs text-gray-600 mb-1">CHECK-IN</label>
-                                <input type="date" class="w-full border-none p-0 date-picker focus:outline-none text-gray-800" placeholder="Add date">
-                            </div>
-                            <div class="p-3 border-b">
-                                <label class="block text-xs text-gray-600 mb-1">CHECKOUT</label>
-                                <input type="date" class="w-full border-none p-0 date-picker focus:outline-none text-gray-800" placeholder="Add date">
-                            </div>
-                            <div class="p-3 col-span-2">
-                                <label class="block text-xs text-gray-600 mb-1">GUESTS</label>
-                                <select class="w-full border-none p-0 focus:outline-none text-gray-800">
-                                    <option>1 guest</option>
-                                    <option selected>2 guests</option>
-                                </select>
+                    <form method="POST" action="{% url 'create_booking' location.id %}">
+                        {% csrf_token %}
+                        <div class="border rounded-lg overflow-hidden mb-4">
+                            <div class="grid grid-cols-2">
+                                <div class="p-3 border-r border-b">
+                                    <label class="block text-xs text-gray-600 mb-1">CHECK-IN</label>
+                                    <input 
+                                        type="date" 
+                                        name="check_in"
+                                        required
+                                        class="w-full border-none p-0 date-picker focus:outline-none text-gray-800"
+                                    >
+                                </div>
+                                <div class="p-3 border-b">
+                                    <label class="block text-xs text-gray-600 mb-1">CHECKOUT</label>
+                                    <input 
+                                        type="date" 
+                                        name="check_out"
+                                        required
+                                        class="w-full border-none p-0 date-picker focus:outline-none text-gray-800"
+                                    >
+                                </div>
+                                <div class="p-3 col-span-2">
+                                    <label class="block text-xs text-gray-600 mb-1">GUESTS</label>
+                                    <select 
+                                        name="guests"
+                                        class="w-full border-none p-0 focus:outline-none text-gray-800"
+                                        required
+                                    >
+                                        <option value="1">1 guest</option>
+                                        <option value="2">2 guests</option>
+                                        <option value="3">3 guests</option>
+                                        <option value="4">4 guests</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <button class="w-full py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition mb-4">Reserve</button>
-                    <p class="text-center text-gray-600 mb-6">You won't be charged yet</p>
+                        <button type="submit" class="w-full py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition mb-4">
+                            Reserve
+                        </button>
+                    </form>
 
                     <!-- Price Breakdown -->
                     <div class="space-y-3 mb-6">
                         <div class="flex justify-between">
-                            <span class="underline">$85 x 7 nights</span>
-                            <span>$595</span>
+                            <span>₹{{location.rent}} x <span id="num-nights">0</span> nights</span>
+                            <span id="total-rent">₹0</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="underline">Cleaning fee</span>
-                            <span>$50</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="underline">Service fee</span>
-                            <span>$65</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="underline">Taxes</span>
-                            <span>$45</span>
+                            <span>Service fee</span>
+                            <span>₹500</span>
                         </div>
                     </div>
 
                     <div class="flex justify-between pt-4 border-t font-bold">
                         <span>Total</span>
-                        <span>$755</span>
+                        <span id="total-amount">₹0</span>
                     </div>
-                </div>
-
-                <!-- Report Listing -->
-                <div class="mt-4 text-center">
-                    <button class="text-gray-600 hover:underline flex items-center justify-center mx-auto">
-                        <i class="fas fa-flag mr-2"></i>
-                        <span>Report this listing</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -815,7 +802,7 @@
                             <i class="fas fa-phone-alt mt-1 mr-3 text-gray-400"></i>
                             <span class="text-gray-400">+1 (555) 123-4567</span>
                         </li>
-                        <li class="flex items-start">
+                        <li class="flex items-startuu">
                             <i class="fas fa-envelope mt-1 mr-3 text-gray-400"></i>
                             <span class="text-gray-400">info@tournest.com</span>
                         </li>
@@ -934,6 +921,50 @@
                     document.body.classList.remove('modal-active');
                 }
             });
+        });
+
+        function toggleDescription() {
+            const description = document.getElementById('description');
+            const button = document.getElementById('showMoreBtn');
+            const gradient = description.nextElementSibling;
+
+            if (description.style.maxHeight === '100px') {
+                description.style.maxHeight = description.scrollHeight + 'px';
+                button.textContent = 'Show less';
+                gradient.style.display = 'none';
+            } else {
+                description.style.maxHeight = '100px';
+                button.textContent = 'Show more';
+                gradient.style.display = 'block';
+            }
+        }
+
+        // Add this to your existing script section
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkInInput = document.querySelector('input[name="check_in"]');
+            const checkOutInput = document.querySelector('input[name="check_out"]');
+            const rentPerNight = {{ location.rent }};
+
+            function updatePrices() {
+                if (checkInInput.value && checkOutInput.value) {
+                    const checkIn = new Date(checkInInput.value);
+                    const checkOut = new Date(checkOutInput.value);
+                    const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                    
+                    if (nights > 0) {
+                        const totalRent = nights * rentPerNight;
+                        const serviceFee = 500;
+                        const totalAmount = totalRent + serviceFee;
+
+                        document.getElementById('num-nights').textContent = nights;
+                        document.getElementById('total-rent').textContent = `₹${totalRent}`;
+                        document.getElementById('total-amount').textContent = `₹${totalAmount}`;
+                    }
+                }
+            }
+
+            checkInInput.addEventListener('change', updatePrices);
+            checkOutInput.addEventListener('change', updatePrices);
         });
     </script>
 </body>
