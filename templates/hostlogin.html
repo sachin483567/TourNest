@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Host - Tournest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .host-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .step-active {
+            color: #3B82F6;
+            border-color: #3B82F6;
+            background-color: #EFF6FF;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <span class="text-2xl font-bold text-primary">Tournest</span>
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-primary font-medium">Become a Host</a>
+                    <a href="/help" class="text-gray-600 hover:text-primary">Help</a>
+                    <a href="host-login.html" class="px-4 py-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition">Host Login</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4">
+                <div class="flex flex-col space-y-3">
+                    <a href="#" class="text-primary font-medium">Become a Host</a>
+                    <a href="/help" class="text-gray-600 hover:text-primary">Help</a>
+                    <a href="host-login.html" class="px-4 py-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition text-center">Host Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Header -->
+    <div class="bg-primary text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">Become a Host on Tournest</h1>
+            <p class="text-xl max-w-3xl mx-auto">Share your space, earn extra income, and connect with travelers from around the world.</p>
+        </div>
+    </div>
+
+    <!-- Registration Steps -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-wrap justify-center mb-12">
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full border-2 step-active flex items-center justify-center font-semibold">1</div>
+                    <span class="ml-3 font-medium">Account Info</span>
+                </div>
+                <div class="hidden md:block text-gray-300">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center font-semibold text-gray-400">2</div>
+                    <span class="ml-3 font-medium text-gray-400">Property Details</span>
+                </div>
+                <div class="hidden md:block text-gray-300">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center font-semibold text-gray-400">3</div>
+                    <span class="ml-3 font-medium text-gray-400">Verification</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="md:flex">
+                <!-- Left Side - Form -->
+                <div class="p-8 w-full md:w-3/5">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Create Your Host Account</h2>
+                    
+                    <form class="space-y-6">
+                        <label class="block mb-2 text-gray-700" for="email">Email or Phone Number</label>
+                        <input type="email" id="email" class="w-full p-3 rounded-lg border border-gray-300 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" />
+
+                        <label class="block mb-2 text-gray-700" for="password">Password</label>
+                        <input type="password" id="password" class="w-full p-3 rounded-lg border border-gray-300 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" />
+
+                        <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition">Login</button>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <a href="#" class="text-blue-500 hover:underline text-sm">Forgot password?</a>
+                    </div>
+                    <div class="mt-2 text-center text-sm text-gray-600">
+                        Don't have an account? <a href="/become_host" class="text-blue-500 hover:underline">Sign up</a>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Benefits -->
+                <div class="bg-blue-50 p-8 w-full md:w-2/5">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Why Host on Tournest?</h3>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 text-secondary">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="ml-3 text-gray-700">
+                                <span class="font-medium">Earn extra income</span> - Set your own prices and earn money sharing your space
+                            </p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 text-secondary">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="ml-3 text-gray-700">
+                                <span class="font-medium">Flexible hosting</span> - Choose when and how often you host
+                            </p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 text-secondary">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="ml-3 text-gray-700">
+                                <span class="font-medium">Secure platform</span> - Verified guests and 24/7 support
+                            </p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 text-secondary">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="ml-3 text-gray-700">
+                                <span class="font-medium">Global reach</span> - Connect with travelers from around the world
+                            </p>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-8 p-4 bg-white rounded-lg border border-gray-200">
+                        <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Host" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold">Michael Rodriguez</h4>
+                                <p class="text-gray-600 text-sm">Host • Miami</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic">"Hosting on Tournest has been a great experience. The platform is easy to use, and I've met wonderful people from around the world while earning extra income."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="container mx-auto px-4 py-16">
+        <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+        
+        <div class="max-w-3xl mx-auto">
+            <!-- FAQ Item 1 -->
+            <div class="mb-6">
+                <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq1')">
+                    <span class="text-lg font-semibold">How much does it cost to become a host?</span>
+                    <i id="faq1Icon" class="fas fa-plus text-primary"></i>
+                </button>
+                <div id="faq1" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                    <p class="text-gray-700">It's completely free to create a host account and list your property on Tournest. We only charge a small service fee (typically 3%) when you receive a booking. There are no monthly fees or hidden charges.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="mb-6">
+                <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq2')">
+                    <span class="text-lg font-semibold">What kind of properties can I list?</span>
+                    <i id="faq2Icon" class="fas fa-plus text-primary"></i>
+                </button>
+                <div id="faq2" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                    <p class="text-gray-700">You can list almost any type of property on Tournest, including apartments, houses, vacation homes, private rooms, shared rooms, unique spaces like treehouses or boats, and more. The platform is designed to accommodate a wide variety of accommodations.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="mb-6">
+                <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq3')">
+                    <span class="text-lg font-semibold">How do I get paid?</span>
+                    <i id="faq3Icon" class="fas fa-plus text-primary"></i>
+                </button>
+                <div id="faq3" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                    <p class="text-gray-700">Tournest processes payments securely and releases funds to hosts 24 hours after guest check-in. You can receive payments via direct deposit, PayPal, or other available payment methods in your region. You can set up and manage your payment preferences in your host dashboard.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 4 -->
+            <div class="mb-6">
+                <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq4')">
+                    <span class="text-lg font-semibold">What support does Tournest provide to hosts?</span>
+                    <i id="faq4Icon" class="fas fa-plus text-primary"></i>
+                </button>
+                <div id="faq4" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                    <p class="text-gray-700">Tournest provides 24/7 customer support, a host protection insurance program, verified guest profiles, secure payment processing, and tools to help you manage your listings effectively. We also offer resources and tips to help you become a successful host and maximize your earnings.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <span class="text-2xl font-bold text-white">Tournest</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Connecting travelers with local hosts for authentic and affordable stays around the world.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Search Stays</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Become a Host</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Safety Information</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Cancellation Options</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Report a Concern</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">123 Main Street, New York, NY 10001</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">hosts@tournest.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 mb-4 md:mb-0">&copy; 2023 Tournest. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+        
+        // Toggle FAQ
+        function toggleFAQ(faqId) {
+            const faq = document.getElementById(faqId);
+            const icon = document.getElementById(faqId + 'Icon');
+            
+            faq.classList.toggle('hidden');
+            
+            if (faq.classList.contains('hidden')) {
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            } else {
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+            }
+        }
+    </script>
+</body>
+</html>

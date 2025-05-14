@@ -29,6 +29,12 @@ urlpatterns = [
      path("host_profile/",TemplateView.as_view (template_name="host_profile.html"),name="host_profile"),
      path("user_profile/",TemplateView.as_view (template_name="user_profile.html"),name="user_profile"),
      path("booking/",TemplateView.as_view (template_name="booking.html"),name="booking"),
+     path("help/",TemplateView.as_view (template_name="help.html"),name="help"),
+     path("become_host/",TemplateView.as_view (template_name="become_host.html"),name="become_host"),
+     path("hostlogin/",TemplateView.as_view (template_name="hostlogin.html"),name="host.login"),
+
+
+
 
      
      path("",include('location.urls'),name="location"),

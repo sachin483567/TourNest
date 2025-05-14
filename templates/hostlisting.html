@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>List Your Property - Tournest</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-4xl mx-auto mt-10 bg-white shadow-md rounded-xl p-8">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">List Your Property</h2>
+    <form action="/submit-property" method="POST" enctype="multipart/form-data" class="space-y-6">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Property Title</label>
+        <input type="text" name="title" class="mt-1 w-full border border-gray-300 p-2 rounded-lg" placeholder="e.g. Cozy Apartment in City Center" required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea name="description" rows="4" class="mt-1 w-full border border-gray-300 p-2 rounded-lg" placeholder="Describe your space..." required></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Location</label>
+          <input type="text" name="location" class="mt-1 w-full border border-gray-300 p-2 rounded-lg" required>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Price per Night (USD)</label>
+          <input type="number" name="price" class="mt-1 w-full border border-gray-300 p-2 rounded-lg" min="0" required>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Available From</label>
+          <input type="date" name="available_from" class="mt-1 w-full border border-gray-300 p-2 rounded-lg" required>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Available Until</label>
+          <input type="date" name="available_until" class="mt-1 w-full border border-gray-300 p-2 rounded-lg" required>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Amenities</label>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+          <label><input type="checkbox" name="amenities" value="WiFi" class="mr-2">WiFi</label>
+          <label><input type="checkbox" name="amenities" value="Kitchen" class="mr-2">Kitchen</label>
+          <label><input type="checkbox" name="amenities" value="Parking" class="mr-2">Parking</label>
+          <label><input type="checkbox" name="amenities" value="AC" class="mr-2">Air Conditioning</label>
+          <label><input type="checkbox" name="amenities" value="TV" class="mr-2">TV</label>
+          <label><input type="checkbox" name="amenities" value="Washer" class="mr-2">Washer</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Upload Property Images</label>
+        <input type="file" name="images" multiple class="mt-2 p-2 w-full border border-gray-300 rounded-lg" accept="image/*">
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Submit Listing</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
