@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - Tournest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        
+        .modal-active {
+            overflow-x: hidden;
+            overflow-y: visible !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-home text-primary text-2xl"></i>
+                    <span class="text-2xl font-bold text-primary">Tournest</span>
+                </div>
+                
+                <!-- Search Bar - Desktop -->
+                <div class="hidden md:flex items-center flex-1 max-w-md mx-4">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Search destinations..." class="w-full py-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-primary">Become a Host</a>
+                    <a href="#" class="text-primary font-medium">Help</a>
+                    <button onclick="toggleModal('loginModal')" class="px-4 py-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition">Login</button>
+                    <button onclick="toggleModal('signupModal')" class="px-4 py-2 rounded-full bg-primary text-white hover:bg-blue-600 transition">Sign Up</button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4">
+                <div class="flex items-center mb-4">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Search destinations..." class="w-full py-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-3">
+                    <a href="#" class="text-gray-600 hover:text-primary">Become a Host</a>
+                    <a href="#" class="text-primary font-medium">Help</a>
+                    <button onclick="toggleModal('loginModal')" class="px-4 py-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition">Login</button>
+                    <button onclick="toggleModal('signupModal')" class="px-4 py-2 rounded-full bg-primary text-white hover:bg-blue-600 transition">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Help Header -->
+    <section class="bg-primary text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">How Can We Help You?</h1>
+            <p class="text-xl mb-8">Find answers to your questions and get the support you need</p>
+            <div class="max-w-3xl mx-auto">
+                <div class="relative">
+                    <input type="text" placeholder="Search for help topics..." class="w-full py-4 pl-12 pr-4 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 text-lg">
+                    <i class="fas fa-search absolute left-4 top-5 text-gray-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Help Categories -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Popular Help Topics</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Category 1 -->
+                <div class="bg-light p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Account & Profile</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Creating an account</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Updating your profile</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Account verification</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Password reset</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Privacy settings</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="inline-block mt-6 text-primary hover:underline">View all account topics</a>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="bg-light p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-suitcase"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Booking & Reservations</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">How to book a stay</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Cancellation policies</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Modifying reservations</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Payment methods</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Booking for someone else</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="inline-block mt-6 text-primary hover:underline">View all booking topics</a>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="bg-light p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Hosting</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Becoming a host</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Creating a listing</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Host protection insurance</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Setting pricing</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Managing reservations</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="inline-block mt-6 text-primary hover:underline">View all hosting topics</a>
+                </div>
+
+                <!-- Category 4 -->
+                <div class="bg-light p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Payments & Refunds</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Payment methods</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Refund process</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Currency conversion</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Taxes and fees</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Invoices and receipts</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="inline-block mt-6 text-primary hover:underline">View all payment topics</a>
+                </div>
+
+                <!-- Category 5 -->
+                <div class="bg-light p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Safety & Security</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Safety guidelines</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Reporting issues</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Account security</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Scam prevention</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Emergency contacts</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="inline-block mt-6 text-primary hover:underline">View all safety topics</a>
+                </div>
+
+                <!-- Category 6 -->
+                <div class="bg-light p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Mobile App</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Downloading the app</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">App features</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Troubleshooting</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">Offline access</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-angle-right text-primary mr-2"></i>
+                            <a href="#" class="text-gray-700 hover:text-primary">App notifications</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="inline-block mt-6 text-primary hover:underline">View all app topics</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            <div class="max-w-4xl mx-auto">
+                <!-- FAQ Item 1 -->
+                <div class="mb-6">
+                    <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq1')">
+                        <span class="text-lg font-semibold">How do I create an account?</span>
+                        <i id="faq1Icon" class="fas fa-plus text-primary"></i>
+                    </button>
+                    <div id="faq1" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                        <p class="text-gray-700">To create an account, click on the "Sign Up" button in the top right corner of the page. You'll need to provide your name, email address, phone number, and create a password. You can choose to sign up as a guest or a host. Once you've filled in all the required information, click "Sign Up" to create your account.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="mb-6">
+                    <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq2')">
+                        <span class="text-lg font-semibold">What payment methods are accepted?</span>
+                        <i id="faq2Icon" class="fas fa-plus text-primary"></i>
+                    </button>
+                    <div id="faq2" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                        <p class="text-gray-700">Tournest accepts various payment methods including major credit cards (Visa, Mastercard, American Express), debit cards, PayPal, and Apple Pay. The available payment methods may vary depending on your country or region. All payments are processed securely through our platform to protect both guests and hosts.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="mb-6">
+                    <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq3')">
+                        <span class="text-lg font-semibold">How do I cancel a reservation?</span>
+                        <i id="faq3Icon" class="fas fa-plus text-primary"></i>
+                    </button>
+                    <div id="faq3" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                        <p class="text-gray-700">To cancel a reservation, go to your account and navigate to "Trips" or "Bookings." Find the reservation you want to cancel and click on "Cancel Reservation." The refund amount will depend on the host's cancellation policy, which is displayed on the listing page and in your booking confirmation. Some bookings may be non-refundable or have partial refunds depending on how close to the check-in date you cancel.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="mb-6">
+                    <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq4')">
+                        <span class="text-lg font-semibold">How do I become a host?</span>
+                        <i id="faq4Icon" class="fas fa-plus text-primary"></i>
+                    </button>
+                    <div id="faq4" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                        <p class="text-gray-700">To become a host, click on "Become a Host" in the navigation menu. You'll need to create an account if you don't already have one. Then, you'll be guided through the process of creating your listing, which includes providing details about your space, setting house rules, adding photos, and setting your price. Once your listing is complete, you can publish it and start receiving booking requests.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="mb-6">
+                    <button class="flex justify-between items-center w-full bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition" onclick="toggleFAQ('faq5')">
+                        <span class="text-lg font-semibold">Is my personal information secure?</span>
+                        <i id="faq5Icon" class="fas fa-plus text-primary"></i>
+                    </button>
+                    <div id="faq5" class="hidden bg-white px-5 pb-5 rounded-b-lg">
+                        <p class="text-gray-700">Yes, Tournest takes data security very seriously. We use industry-standard encryption to protect your personal and payment information. We only share your information with hosts or guests as necessary to facilitate bookings. You can review our Privacy Policy for more details on how we collect, use, and protect your data. If you have specific concerns about your account security, you can contact our support team.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="#" class="px-6 py-3 bg-primary text-white rounded-full hover:bg-blue-600 transition">View All FAQs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Support Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Still Need Help?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Contact Option 1 -->
+                    <div class="bg-light p-8 rounded-xl text-center hover:shadow-lg transition duration-300">
+                        <div class="bg-primary bg-opacity-10 p-4 rounded-full inline-flex items-center justify-center w-20 h-20 mb-4">
+                            <i class="fas fa-comments text-3xl text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Live Chat</h3>
+                        <p class="text-gray-600 mb-6">Chat with our support team in real-time for immediate assistance.</p>
+                        <button class="px-6 py-3 bg-primary text-white rounded-full hover:bg-blue-600 transition w-full">Start Chat</button>
+                    </div>
+
+                    <!-- Contact Option 2 -->
+                    <div class="bg-light p-8 rounded-xl text-center hover:shadow-lg transition duration-300">
+                        <div class="bg-primary bg-opacity-10 p-4 rounded-full inline-flex items-center justify-center w-20 h-20 mb-4">
+                            <i class="fas fa-envelope text-3xl text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Email Support</h3>
+                        <p class="text-gray-600 mb-6">Send us an email and we'll get back to you within 24 hours.</p>
+                        <button class="px-6 py-3 bg-primary text-white rounded-full hover:bg-blue-600 transition w-full">Email Us</button>
+                    </div>
+
+                    <!-- Contact Option 3 -->
+                    <div class="bg-light p-8 rounded-xl text-center hover:shadow-lg transition duration-300">
+                        <div class="bg-primary bg-opacity-10 p-4 rounded-full inline-flex items-center justify-center w-20 h-20 mb-4">
+                            <i class="fas fa-phone-alt text-3xl text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Phone Support</h3>
+                        <p class="text-gray-600 mb-6">Call us directly for urgent issues or complex problems.</p>
+                        <button class="px-6 py-3 bg-primary text-white rounded-full hover:bg-blue-600 transition w-full">Call Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Support Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Community Support</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Community Option 1 -->
+                    <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition duration-300">
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-4 rounded-full mr-6">
+                                <i class="fas fa-users text-2xl text-primary"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3">Community Forum</h3>
+                                <p class="text-gray-600 mb-4">Connect with other users, share experiences, and find answers to common questions in our community forum.</p>
+                                <a href="#" class="text-primary hover:underline">Visit Forum</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Community Option 2 -->
+                    <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition duration-300">
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-4 rounded-full mr-6">
+                                <i class="fas fa-book-open text-2xl text-primary"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3">Knowledge Base</h3>
+                                <p class="text-gray-600 mb-4">Browse our extensive collection of articles, tutorials, and guides to find detailed information on all features.</p>
+                                <a href="#" class="text-primary hover:underline">Explore Knowledge Base</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Community Option 3 -->
+                    <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition duration-300">
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-4 rounded-full mr-6">
+                                <i class="fas fa-video text-2xl text-primary"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3">Video Tutorials</h3>
+                                <p class="text-gray-600 mb-4">Watch step-by-step video guides on how to use Tournest features and get the most out of your experience.</p>
+                                <a href="#" class="text-primary hover:underline">Watch Tutorials</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Community Option 4 -->
+                    <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition duration-300">
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-4 rounded-full mr-6">
+                                <i class="fas fa-newspaper text-2xl text-primary"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3">Blog & Updates</h3>
+                                <p class="text-gray-600 mb-4">Stay informed about new features, travel tips, and success stories from our community of hosts and guests.</p>
+                                <a href="#" class="text-primary hover:underline">Read Blog</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <span class="text-2xl font-bold text-white">Tournest</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Connecting travelers with local hosts for authentic and affordable stays around the world.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Search Stays</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Become a Host</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Safety Information</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Cancellation Options</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Report a Concern</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">123 Main Street, New York, NY 10001</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-gray-400"></i>
+                            <span class="text-gray-400">help@tournest.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 mb-4 md:mb-0">&copy; 2023 Tournest. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Login</h3>
+                <button onclick="toggleModal('loginModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-600 transition">Login</button>
+            </form>
+            <div class="mt-4 text-center">
+                <a href="#" class="text-primary hover:underline">Forgot password?</a>
+            </div>
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">Don't have an account? <a href="#" onclick="toggleModal('loginModal'); toggleModal('signupModal')" class="text-primary hover:underline">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Sign Up</h3>
+                <button onclick="toggleModal('signupModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <div class="flex space-x-4 mb-4">
+                    <button class="flex-1 py-2 border border-gray-300 rounded-lg bg-primary text-white">Guest</button>
+                    <button class="flex-1 py-2 border border-gray-300 rounded-lg">Host</button>
+                </div>
+            </div>
+            <form>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="firstName" class="block text-gray-700 mb-2">First Name</label>
+                        <input type="text" id="firstName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-gray-700 mb-2">Last Name</label>
+                        <input type="text" id="lastName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="signupEmail" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="signupEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="mb-4">
+                    <label for="phone" class="block text-gray-700 mb-2">Phone Number</label>
+                    <input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="mb-6">
+                    <label for="signupPassword" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="signupPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-600 transition">Sign Up</button>
+            </form>
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">Already have an account? <a href="#" onclick="toggleModal('signupModal'); toggleModal('loginModal')" class="text-primary hover:underline">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+        
+        // Toggle Modal
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+            document.body.classList.toggle('modal-active');
+        }
+        
+        // Toggle FAQ
+        function toggleFAQ(faqId) {
+            const faq = document.getElementById(faqId);
+            const icon = document.getElementById(faqId + 'Icon');
+            
+            faq.classList.toggle('hidden');
+            
+            if (faq.classList.contains('hidden')) {
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            } else {
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+            }
+        }
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(function(modal) {
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                    document.body.classList.remove('modal-active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

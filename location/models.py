@@ -1,6 +1,7 @@
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from authentication.models import Host  # Add this import
 
 # Create your models here.
 class Location(models.Model):
@@ -11,6 +12,7 @@ class Location(models.Model):
     location = models.CharField(max_length=50)
     image = models.ImageField(upload_to='products/')
     facilities = models.TextField()
+    host = models.ForeignKey('authentication.Host', on_delete=models.CASCADE, related_name='properties')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
@@ -46,6 +48,24 @@ class Location(models.Model):
 
     def _str_(self):
         return self.name
+
+    def get_average_rating(self):
+        reviews = self.reviews.all()
+        if reviews:
+            return round(sum(review.rating for review in reviews) / len(reviews), 1)
+        return 0
+
+    def get_review_count(self):
+        return self.reviews.count()
+
+    def get_rating_breakdown(self):
+        reviews = self.reviews.all()
+        total = len(reviews)
+        if total == 0:
+            return {i: 0 for i in range(1, 6)}
+        
+        counts = {i: len([r for r in reviews if r.rating == i]) for i in range(1, 6)}
+        return {star: (count/total)*100 for star, count in counts.items()}
 
 class Review(models.Model):
     RATING_CHOICES = (

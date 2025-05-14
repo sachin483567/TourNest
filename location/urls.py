@@ -12,4 +12,6 @@ urlpatterns = [
     path('booking/confirmation/<int:booking_id>/', booking_confirmation, name='booking_confirmation'),
     path('admin/bookings/', views.manage_bookings, name='manage_bookings'),
     path('admin/bookings/<int:booking_id>/update/', views.update_booking_status, name='update_booking_status'),
+    path('location/<int:location_id>/review/', views.add_review, name='add_review'),
+
 ]

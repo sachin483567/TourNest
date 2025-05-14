@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Location, Booking
+from django.db.models import Q, Avg  # Add Avg here
+from .models import Location, Booking, Review
 from datetime import datetime
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator
-from django.db.models import Q
 
 def browse(request):
     # Get search parameters from request
@@ -38,8 +38,16 @@ def browse(request):
 
 def productDetails(request, location_id):
     location = get_object_or_404(Location, id=location_id)
-    context ={
-        "location":location
+    reviews = location.reviews.all().order_by('-created_at')
+    
+    # Calculate average rating
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+    
+    context = {
+        "location": location,
+        "reviews": reviews,
+        "avg_rating": round(avg_rating, 1),
+        "review_count": reviews.count()
     }
     return render(request, "details.html", context=context)
 
@@ -126,4 +134,28 @@ def update_booking_status(request, booking_id):
             messages.success(request, f'Booking #{booking.id} status updated to {new_status}')
         
     return redirect('manage_bookings')
+
+@login_required
+def add_review(request, location_id):
+    location = get_object_or_404(Location, id=location_id)
+    
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        
+        # Check if user has already reviewed this location
+        if Review.objects.filter(location=location, user=request.user).exists():
+            messages.error(request, 'You have already reviewed this location.')
+            return redirect('locationDetails', location_id=location_id)
+        
+        # Create new review
+        Review.objects.create(
+            location=location,
+            user=request.user,
+            rating=rating,
+            comment=comment
+        )
+        messages.success(request, 'Review added successfully!')
+    
+    return redirect('locationDetails', location_id=location_id)
 
