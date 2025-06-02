@@ -15,31 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
-from django.views.generic import TemplateView
-from django.conf.urls.static import static
+from django.urls import path, include
 from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path("",TemplateView.as_view (template_name="index.html"),name="home"),
-     path("login/",TemplateView.as_view (template_name="login.html"),name="login"),
-     path("register/",TemplateView.as_view (template_name="register.html"),name="register"),
-     path("host_profile/",TemplateView.as_view (template_name="host_profile.html"),name="host_profile"),
-     path("user_profile/",TemplateView.as_view (template_name="user_profile.html"),name="user_profile"),
-     path("booking/",TemplateView.as_view (template_name="booking.html"),name="booking"),
-     path("help/",TemplateView.as_view (template_name="help.html"),name="help"),
-     path("become_host/",TemplateView.as_view (template_name="become_host.html"),name="become_host"),
-     path("hostlogin/",TemplateView.as_view (template_name="hostlogin.html"),name="host.login"),
-
-
-
-
-     
-     path("",include('location.urls'),name="location"),
-     path("",include('authentication.urls'),name="auth"),
+    path('accounts/', include('authentication.urls')),  # This will handle login, logout, etc.
+    path('', include('location.urls')),
+    # Other URL patterns...
 ]
 
+# Add media URL configuration
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,6 +6,8 @@ from .models import Location, Booking, Review
 from datetime import datetime
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 def browse(request):
     # Get search parameters from request
@@ -123,17 +125,32 @@ def manage_bookings(request):
     }
     return render(request, 'admin/manage_bookings.html', context)
 
-@staff_member_required
-def update_booking_status(request, booking_id):
-    if request.method == 'POST':
-        booking = get_object_or_404(Booking, id=booking_id)
-        new_status = request.POST.get('status')
-        if new_status in dict(Booking.STATUS_CHOICES):
+@require_POST
+@login_required
+def update_booking_status(request):
+    booking_id = request.POST.get('booking_id')
+    new_status = request.POST.get('status')
+    
+    if not booking_id or not new_status:
+        return JsonResponse({'success': False, 'error': 'Missing required parameters'})
+    
+    try:
+        # Check if the user is the host of the property
+        booking = Booking.objects.get(id=booking_id)
+        
+        if booking.location.host.user != request.user:
+            return JsonResponse({'success': False, 'error': 'You are not authorized to update this booking'})
+        
+        # Update the status
+        if new_status in dict(Booking.STATUS_CHOICES).keys():
             booking.status = new_status
             booking.save()
-            messages.success(request, f'Booking #{booking.id} status updated to {new_status}')
-        
-    return redirect('manage_bookings')
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid status'})
+            
+    except Booking.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Booking not found'})
 
 @login_required
 def add_review(request, location_id):
@@ -158,4 +175,33 @@ def add_review(request, location_id):
         messages.success(request, 'Review added successfully!')
     
     return redirect('locationDetails', location_id=location_id)
+
+@login_required
+def host_bookings(request):
+    # Get the host profile associated with the logged-in user
+    try:
+        host = request.user.host  # Assuming there's a one-to-one relationship between User and Host
+        
+        # Get all locations owned by this host
+        host_locations = Location.objects.filter(host=host)
+        
+        # Get all bookings for these locations
+        bookings = Booking.objects.filter(location__in=host_locations).order_by('-created_at')
+        
+        # Optional: Filter by status if provided in query params
+        status_filter = request.GET.get('status')
+        if status_filter:
+            bookings = bookings.filter(status=status_filter)
+            
+        context = {
+            'bookings': bookings,
+            'locations': host_locations,
+            'active_status': status_filter or 'all'
+        }
+        
+        return render(request, 'location/host_bookings.html', context)
+        
+    except AttributeError:
+        # Handle case where the user is not a host
+        return render(request, 'location/not_host.html')
 

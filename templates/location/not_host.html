@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Not a Host{% endblock %}
+
+{% block content %}
+<div class="container my-5 text-center">
+    <div class="alert alert-warning">
+        <h3>You are not registered as a host</h3>
+        <p class="mt-3">You need to be registered as a host to view property bookings.</p>
+        <a href="{% url 'authentication:become_host' %}" class="btn btn-primary mt-3">Become a Host</a>
+    </div>
+</div>
+{% endblock %}
