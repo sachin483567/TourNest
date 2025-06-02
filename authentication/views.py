@@ -5,10 +5,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-
+from django.db.models import Sum
 from .models import Host
-from .forms import LoginForm, RegisterForm, UserProfileForm, HostProfileForm
+from location.models import Location
+
+from .forms import LoginForm, SignUpForm, HostSignUpForm
 
 
 def login_view(request):
@@ -64,69 +65,64 @@ def register_view(request):
         
     return render(request, 'authentication/register.html', {'form': form})
 
-@login_required
-def user_profile_view(request):
-    """Display and update user profile"""
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Profile updated successfully.')
-            return redirect('authentication:user_profile')
-    else:
-        form = UserProfileForm(instance=request.user)
-        
-    context = {
-        'form': form
-    }
-    return render(request, 'authentication/user_profile.html', context)
+    return render(request, "register.html", {"form": form, "msg": msg, "success": success})
 
-@login_required
-def host_profile_view(request):
-    """Display and update host profile"""
-    try:
-        host = request.user.host
-    except Host.DoesNotExist:
-        # Redirect to become host page if user is not a host
-        return redirect('authentication:become_host')
+
+def register_host(request):
+    if request.method == 'POST':
+        form = HostSignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = form.cleaned_data['email']  # Use email as username
+            user.save()
+            
+            # Create Host profile
+            Host.objects.create(
+                user=user,
+                phone_number=form.cleaned_data['phone_number'],
+                address=form.cleaned_data['address']
+            )
+            
+            messages.success(request, 'Your host account has been created successfully!')
+            return redirect('property_details')
+    else:
+        form = HostSignUpForm()
+    
+    return render(request, 'become_host.html', {'form': form})
+
+def host_login(request):  # Removed @login_required decorator
+    # Redirect if already logged in as host
+    if request.user.is_authenticated and hasattr(request.user, 'host'):
+        return redirect('host_dashboard')
     
     if request.method == 'POST':
-        form = HostProfileForm(request.POST, request.FILES, instance=host)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Host profile updated successfully.')
-            return redirect('authentication:host_profile')
-    else:
-        form = HostProfileForm(instance=host)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
         
-    context = {
-        'form': form
-    }
-    return render(request, 'authentication/host_profile.html', context)
+        if user is not None and hasattr(user, 'host'):
+            login(request, user)
+            messages.success(request, 'Welcome back!')
+            return redirect('host_dashboard')
+        else:
+            messages.error(request, 'Invalid credentials or not a host account.')
+    
+    return render(request, 'hostlogin.html')
 
 @login_required
-def become_host_view(request):
-    """Allow user to become a host"""
-    # Check if user is already a host
-    try:
-        host = request.user.host
-        messages.info(request, 'You are already registered as a host.')
-        return redirect('authentication:host_profile')
-    except Host.DoesNotExist:
-        pass
+def host_dashboard(request):
+    # Get host's locations
+    locations = Location.objects.filter(host=request.user.host)
     
-    if request.method == 'POST':
-        form = HostProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            host = form.save(commit=False)
-            host.user = request.user
-            host.save()
-            messages.success(request, 'You are now registered as a host!')
-            return redirect('authentication:host_profile')
-    else:
-        form = HostProfileForm()
-        
+    # Get booking stats
+    total_locations = locations.count()
+    active_bookings = sum(location.booking_set.filter(status='confirmed').count() for location in locations)
+    total_earnings = sum(location.booking_set.filter(status='completed').aggregate(Sum('total_price'))['total_price__sum'] or 0)
+    
     context = {
-        'form': form
+        'locations': locations,
+        'total_locations': total_locations,
+        'active_bookings': active_bookings,
+        'total_earnings': total_earnings,
     }
-    return render(request, 'authentication/become_host.html', context)
+    return render(request, 'host_dashboard.html', context)
