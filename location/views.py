@@ -8,6 +8,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from .forms import LocationForm
+from authentication.models import Host
 
 def browse(request):
     # Get search parameters from request
@@ -204,4 +206,108 @@ def host_bookings(request):
     except AttributeError:
         # Handle case where the user is not a host
         return render(request, 'location/not_host.html')
+
+@login_required
+def add_location(request):
+    """Allow hosts to add new locations"""
+    try:
+        host = request.user.host
+    except Host.DoesNotExist:
+        messages.error(request, 'You need to be registered as a host to add locations.')
+        return redirect('become_host')
+    
+    if request.method == 'POST':
+        form = LocationForm(request.POST, request.FILES)
+        if form.is_valid():
+            location = form.save(commit=False)
+            location.host = host
+            location.distance = 0  # Set a default distance value
+            location.save()
+            messages.success(request, f'Location "{location.name}" has been added successfully!')
+            return redirect('host_dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = LocationForm()
+    
+    context = {
+        'form': form,
+        'host': host
+    }
+    return render(request, 'add_location.html', context)
+
+@login_required
+def edit_location(request, location_id):
+    """Allow hosts to edit their locations"""
+    try:
+        host = request.user.host
+        location = Location.objects.get(id=location_id, host=host)
+    except (Host.DoesNotExist, Location.DoesNotExist):
+        messages.error(request, 'Location not found or you do not have permission to edit it.')
+        return redirect('host_dashboard')
+    
+    if request.method == 'POST':
+        form = LocationForm(request.POST, request.FILES, instance=location)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Location "{location.name}" has been updated successfully!')
+            return redirect('host_dashboard')
+    else:
+        form = LocationForm(instance=location)
+    
+    context = {
+        'form': form,
+        'location': location,
+        'host': host
+    }
+    return render(request, 'location/edit_location.html', context)
+
+@login_required
+def delete_location(request, location_id):
+    """Allow hosts to delete their locations"""
+    try:
+        host = request.user.host
+        location = Location.objects.get(id=location_id, host=host)
+        location_name = location.name
+        location.delete()
+        messages.success(request, f'Location "{location_name}" has been deleted successfully!')
+    except (Host.DoesNotExist, Location.DoesNotExist):
+        messages.error(request, 'Location not found or you do not have permission to delete it.')
+
+    return redirect('host_dashboard')
+
+@login_required
+def toggle_availability(request, location_id):
+    """Toggle location availability status"""
+    try:
+        host = request.user.host
+        location = Location.objects.get(id=location_id, host=host)
+        
+        # Toggle the is_available status
+        location.is_available = not location.is_available
+        location.save()
+        
+        status = "available" if location.is_available else "unavailable"
+        messages.success(request, f"{location.name} is now marked as {status}")
+    except (Host.DoesNotExist, Location.DoesNotExist):
+        messages.error(request, "Location not found or you don't have permission to edit it.")
+    
+    return redirect('authentication:host_dashboard')
+
+@login_required
+def location_bookings(request, location_id):
+    """View bookings for a specific location"""
+    try:
+        host = request.user.host
+        location = Location.objects.get(id=location_id, host=host)
+        bookings = Booking.objects.filter(location=location).order_by('-created_at')
+        
+        context = {
+            'location': location,
+            'bookings': bookings,
+        }
+        return render(request, 'location/location_bookings.html', context)
+    except (Host.DoesNotExist, Location.DoesNotExist):
+        messages.error(request, "Location not found or you don't have permission to view its bookings.")
+        return redirect('authentication:host_dashboard')
 

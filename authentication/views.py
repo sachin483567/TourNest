@@ -9,37 +9,27 @@ from django.db.models import Sum
 from .models import Host
 from location.models import Location
 
-from .forms import LoginForm, SignUpForm, HostSignUpForm
+from .forms import LoginForm, RegisterForm, UserProfileForm, HostProfileForm, HostSignUpForm  # Add HostSignUpForm to the import statement
 
 
 def login_view(request):
     """Handle user login"""
     if request.user.is_authenticated:
-        return redirect('location:browse')  # Redirect if already logged in
-
-    form = LoginForm(request.POST or None)
-    msg = None
-
-    if request.method == "POST":
-
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, "you are logged in")
-                # Redirect to the URL specified in the 'next' parameter, or to home page
-                next_url = request.GET.get('next', '/')
-                return redirect(next_url)
-            else:
-                msg = 'Invalid credentials'
-                messages.error(request, msg)
+        return redirect('location:browse')
+        
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            next_url = request.GET.get('next', '/')
+            return redirect(next_url)
         else:
-            msg = 'Error validating the form'
-            messages.error(request, msg)
-
-    return render(request, "login.html", {"form": form, "msg": msg})
+            messages.error(request, 'Invalid username or password.')
+    
+    return render(request, 'authentication/login.html')
 
 
 def logout_view(request):
@@ -48,81 +38,101 @@ def logout_view(request):
     return redirect('location:browse')
 
 
-def register_view(request):
+def register_user(request):  # This is the function being imported in urls.py
     """Handle user registration"""
     if request.user.is_authenticated:
         return redirect('location:browse')
         
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST)  # Use RegisterForm instead of SignUpForm
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}. You can now log in.')
-            return redirect('authentication:login')
+            return redirect('login')
     else:
-        form = RegisterForm()
+        form = RegisterForm()  # Use RegisterForm instead of SignUpForm
         
     return render(request, 'authentication/register.html', {'form': form})
 
-    return render(request, "register.html", {"form": form, "msg": msg, "success": success})
-
 
 def register_host(request):
+    """Handle host registration"""
     if request.method == 'POST':
         form = HostSignUpForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.username = form.cleaned_data['email']  # Use email as username
-            user.save()
-            
-            # Create Host profile
+            user = form.save()
+            # Create host profile
             Host.objects.create(
                 user=user,
-                phone_number=form.cleaned_data['phone_number'],
-                address=form.cleaned_data['address']
+                phone_number=form.cleaned_data.get('phone_number')
             )
-            
-            messages.success(request, 'Your host account has been created successfully!')
-            return redirect('property_details')
+            messages.success(request, 'Host account created successfully!')
+            return redirect('host_login')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = HostSignUpForm()
     
     return render(request, 'become_host.html', {'form': form})
 
-def host_login(request):  # Removed @login_required decorator
-    # Redirect if already logged in as host
-    if request.user.is_authenticated and hasattr(request.user, 'host'):
-        return redirect('host_dashboard')
-    
+
+def host_login(request):
+    """Handle host login"""
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
+        user = authenticate(request, username=username, password=password)
         
-        if user is not None and hasattr(user, 'host'):
-            login(request, user)
-            messages.success(request, 'Welcome back!')
-            return redirect('host_dashboard')
+        if user is not None:
+            # Check if user is a host
+            try:
+                host = user.host
+                login(request, user)
+                return redirect('host_dashboard')
+            except Host.DoesNotExist:
+                messages.error(request, 'You are not registered as a host.')
         else:
-            messages.error(request, 'Invalid credentials or not a host account.')
+            messages.error(request, 'Invalid credentials.')
     
     return render(request, 'hostlogin.html')
 
+
 @login_required
 def host_dashboard(request):
-    # Get host's locations
-    locations = Location.objects.filter(host=request.user.host)
-    
-    # Get booking stats
-    total_locations = locations.count()
-    active_bookings = sum(location.booking_set.filter(status='confirmed').count() for location in locations)
-    total_earnings = sum(location.booking_set.filter(status='completed').aggregate(Sum('total_price'))['total_price__sum'] or 0)
-    
-    context = {
-        'locations': locations,
-        'total_locations': total_locations,
-        'active_bookings': active_bookings,
-        'total_earnings': total_earnings,
-    }
-    return render(request, 'host_dashboard.html', context)
+    """Host dashboard view"""
+    try:
+        host = request.user.host
+        # Get host's locations
+        from location.models import Location, Booking
+        from django.db.models import Sum
+        
+        # Fetch all locations owned by this host
+        locations = Location.objects.filter(host=host)
+        total_locations = locations.count()
+        
+        # Get active bookings
+        active_bookings = Booking.objects.filter(
+            location__host=host,
+            status__in=['confirmed', 'active']
+        ).count()
+        
+        # Calculate total earnings
+        total_earnings = Booking.objects.filter(
+            location__host=host,
+            status='completed'
+        ).aggregate(
+            total=Sum('location__rent')
+        )['total'] or 0
+        
+        context = {
+            'host': host,
+            'locations': locations,
+            'total_locations': total_locations,
+            'active_bookings': active_bookings,
+            'total_earnings': total_earnings,
+        }
+        return render(request, 'host_dashboard.html', context)
+    except Host.DoesNotExist:
+        messages.error(request, 'You are not registered as a host.')
+        return redirect('authentication:register_host')

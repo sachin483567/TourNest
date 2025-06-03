@@ -3,25 +3,20 @@ from .models import Host
 
 @admin.register(Host)
 class HostAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number', 'is_verified', 'total_properties', 'average_rating', 'created_at')
-    list_filter = ('is_verified', 'created_at')
-    search_fields = ('user__username', 'user__email', 'phone_number', 'company_name')
-    readonly_fields = ('created_at', 'updated_at', 'total_properties', 'average_rating')
+    list_display = ['user', 'phone_number']
+    list_filter = ['user__date_joined']
+    search_fields = ['user__username', 'user__email', 'phone_number']
+    
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('user', 'phone_number', 'address', 'profile_picture')
-        }),
-        ('Verification', {
-            'fields': ('is_verified', 'verification_documents')
+        ('User Information', {
+            'fields': ('user',)
         }),
         ('Host Details', {
-            'fields': ('company_name', 'description')
+            'fields': ('bio', 'phone_number', 'profile_picture')
         }),
-        ('Statistics', {
-            'fields': ('total_properties', 'average_rating')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        })
     )
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # Editing existing object
+            return ['user']  # Make user field readonly when editing
+        return []

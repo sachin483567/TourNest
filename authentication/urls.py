@@ -11,7 +11,7 @@ from . import views
 urlpatterns = [
     path('login/', login_view, name="login"),
     path('register/', register_user, name="register"),
-    path("logout/", LogoutView.as_view(), name="logout"),
+    path('logout/', LogoutView.as_view(), name="logout"),
     path('become-host/', views.register_host, name='register_host'),
     path('host-login/', views.host_login, name='host_login'),
     path('host/dashboard/', views.host_dashboard, name='host_dashboard'),

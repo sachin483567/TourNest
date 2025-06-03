@@ -3,11 +3,31 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <!-- Dashboard Header -->
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-2xl font-bold text-gray-800">Host Dashboard</h1>
-        <a href="{% url 'add_location' %}" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
-            Add New Location
-        </a>
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Host Dashboard</h1>
+            <p class="text-gray-500">Manage your properties and bookings</p>
+        </div>
+        
+        <div class="flex flex-wrap gap-3">
+            <!-- Calendar button -->
+            <a href="{% url 'location:host_bookings' %}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition">
+                <i class="fas fa-calendar mr-2 text-primary"></i> 
+                All Bookings
+            </a>
+            
+            <!-- Reports button -->
+            {% comment %} <a href="{% url 'location:host_reports' %}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition">
+                <i class="fas fa-chart-bar mr-2 text-primary"></i> 
+                Reports
+            </a> {% endcomment %}
+            
+            <!-- Add new location button -->
+            <a href="{% url 'location:add_location' %}" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-plus-circle mr-2"></i>
+                Add New Location
+            </a>
+        </div>
     </div>
 
     <!-- Stats Cards -->
@@ -60,7 +80,13 @@
                     <tr>
                         <td class="px-6 py-4">
                             <div class="flex items-center">
-                                <img src="{{ location.image.url }}" alt="{{ location.name }}" class="h-10 w-10 rounded-lg object-cover mr-3">
+                                {% if location.image %}
+                                    <img src="{{ location.image.url }}" alt="{{ location.name }}" class="h-10 w-10 rounded-lg object-cover mr-3">
+                                {% else %}
+                                    <div class="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center mr-3">
+                                        <i class="fas fa-home text-gray-400"></i>
+                                    </div>
+                                {% endif %}
                                 <span class="font-medium">{{ location.name }}</span>
                             </div>
                         </td>
@@ -74,10 +100,41 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex space-x-3">
-                                <a href="{% url 'edit_location' location.id %}" class="text-blue-600 hover:text-blue-800">
+                                <!-- View Details Button -->
+                                <a href="{% url 'location:locationDetails' location.id %}" 
+                                   class="text-green-600 hover:text-green-800 hover:bg-green-50 p-2 rounded-md transition-colors duration-200" 
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                
+                                <!-- Edit Location Button -->
+                                <a href="{% url 'location:edit_location' location.id %}" 
+                                   class="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2 rounded-md transition-colors duration-200" 
+                                   title="Edit Location">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button onclick="deleteLocation({{ location.id }})" class="text-red-600 hover:text-red-800">
+                                
+                                <!-- Toggle Availability Button -->
+                                <form method="post" action="{% url 'location:toggle_availability' location.id %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                           class="{% if location.is_available %}text-orange-600 hover:text-orange-800 hover:bg-orange-50{% else %}text-green-600 hover:text-green-800 hover:bg-green-50{% endif %} p-2 rounded-md transition-colors duration-200"
+                                           title="{% if location.is_available %}Mark as Unavailable{% else %}Mark as Available{% endif %}">
+                                        <i class="fas {% if location.is_available %}fa-pause-circle{% else %}fa-play-circle{% endif %}"></i>
+                                    </button>
+                                </form>
+                                
+                                <!-- Manage Bookings Button -->
+                                <a href="{% url 'location:location_bookings' location.id %}" 
+                                   class="text-purple-600 hover:text-purple-800 hover:bg-purple-50 p-2 rounded-md transition-colors duration-200" 
+                                   title="Manage Bookings">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </a>
+                                
+                                <!-- Delete Button -->
+                                <button onclick="deleteLocation({{ location.id }})" 
+                                        class="text-red-600 hover:text-red-800 hover:bg-red-50 p-2 rounded-md transition-colors duration-200" 
+                                        title="Delete Location">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -87,10 +144,18 @@
                 </tbody>
             </table>
         </div>
+        <!-- Empty State -->
         {% else %}
-        <div class="p-6 text-center text-gray-500">
-            <p>You haven't added any locations yet.</p>
-            <a href="{% url 'add_location' %}" class="text-primary hover:underline">Add your first location</a>
+        <div class="p-12 text-center">
+            <div class="bg-blue-50 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                <i class="fas fa-home text-blue-500 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">No Properties Yet</h3>
+            <p class="text-gray-600 mb-8 max-w-md mx-auto">You haven't added any locations yet. Get started by adding your first property to begin receiving bookings.</p>
+            <a href="{% url 'location:add_location' %}" class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-plus-circle mr-2"></i>
+                Add Your First Property
+            </a>
         </div>
         {% endif %}
     </div>
@@ -111,6 +176,7 @@
 
 {% block scripts %}
 <script>
+    // Delete location functionality
     let locationToDelete = null;
     
     function deleteLocation(locationId) {
@@ -125,8 +191,35 @@
     
     document.getElementById('confirmDelete').addEventListener('click', function() {
         if (locationToDelete) {
-            window.location.href = `/location/${locationToDelete}/delete/`;
+            window.location.href = `{% url 'location:delete_location' '0' %}`.replace('0', locationToDelete);
         }
+    });
+    
+    // Simple tooltip functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const tooltipButtons = document.querySelectorAll('[title]');
+        
+        tooltipButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                const tooltip = document.createElement('div');
+                tooltip.textContent = this.getAttribute('title');
+                tooltip.className = 'absolute z-10 px-2 py-1 text-xs bg-gray-800 text-white rounded whitespace-nowrap transform -translate-x-1/2 -translate-y-full';
+                tooltip.style.left = this.offsetLeft + (this.offsetWidth / 2) + 'px';
+                tooltip.style.top = this.offsetTop - 5 + 'px';
+                
+                this.appendChild(tooltip);
+                this.removeAttribute('title');
+                this.dataset.tooltip = tooltip.textContent;
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                const tooltip = this.querySelector('div');
+                if (tooltip) {
+                    this.setAttribute('title', this.dataset.tooltip);
+                    tooltip.remove();
+                }
+            });
+        });
     });
 </script>
 {% endblock %}
